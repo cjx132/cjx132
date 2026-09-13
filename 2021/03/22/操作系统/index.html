@@ -1,0 +1,402 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: dark)"><meta name="generator" content="Hexo 7.1.1">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/cjx132/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/cjx132/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/cjx132/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/cjx132/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/cjx132/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.3.1/css/all.min.css" integrity="sha256-4Lad8m4ZWW1Lgb9+sMVLYEfnIh7BjV1NQMEe79Pviks=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancyapps-ui/6.1.14/fancybox/fancybox.css" integrity="sha256-mdaMxrItEW6hMIVJJNPKuX0B7KCSJQVEv3mVY4N2we4=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/pace/1.2.4/themes/blue/pace-theme-minimal.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pace/1.2.4/pace.min.js" integrity="sha256-gqd7YTjg/BtfqWSwsJOvndl0Bxc8gFImLEkXQT8+qj0=" crossorigin="anonymous" defer></script>
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"cjx132.github.io","root":"/cjx132/","images":"/cjx132/images","scheme":"Gemini","darkmode":true,"version":"8.29.0","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"hljswrap":true,"codeblock":{"theme":{"light":"default","dark":"stackoverflow-dark"},"prism":{"light":"prism","dark":"prism-dark"},"copy_button":{"enable":true,"style":"mac"},"fold":{"enable":false,"height":500},"language":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"duration":200,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/cjx132/search.xml","localsearch":{"enable":true,"top_n_per_article":5,"unescape":false,"preload":true}}</script><script src="/cjx132/js/config.js" defer></script>
+
+    <meta name="description" content="IO多路复用      协程https:&#x2F;&#x2F;www.jianshu.com&#x2F;p&#x2F;8cf31f670d0a 协程：由线程创建的执行体；由于用户程序不能操作内核空间，只能给协程分配用户栈，操作系统对协程一无所知；协程又被称为用户态线程； 创建协程时指定程序入口，分配协程执行栈和控制信息（实现用户态调度）；让出执行权时保存执行现场（从中断处恢复执行）。 协程思想的关键在于控制流的主动让出和恢复，每个协程">
+<meta property="og:type" content="article">
+<meta property="og:title" content="操作系统">
+<meta property="og:url" content="https://cjx132.github.io/cjx132/2021/03/22/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/index.html">
+<meta property="og:site_name" content="cjx132">
+<meta property="og:description" content="IO多路复用      协程https:&#x2F;&#x2F;www.jianshu.com&#x2F;p&#x2F;8cf31f670d0a 协程：由线程创建的执行体；由于用户程序不能操作内核空间，只能给协程分配用户栈，操作系统对协程一无所知；协程又被称为用户态线程； 创建协程时指定程序入口，分配协程执行栈和控制信息（实现用户态调度）；让出执行权时保存执行现场（从中断处恢复执行）。 协程思想的关键在于控制流的主动让出和恢复，每个协程">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://cjx132.github.io/picture-bed/img/image-20210407132529704.png">
+<meta property="og:image" content="https://cjx132.github.io/picture-bed/img/image-20210323123505124.png">
+<meta property="og:image" content="https://cjx132.github.io/picture-bed/img/image-20210407140321862.png">
+<meta property="og:image" content="https://cjx132.github.io/picture-bed/img/image-20210407141024664.png">
+<meta property="og:image" content="https://cjx132.github.io/picture-bed/img/image-20210407142227476.png">
+<meta property="og:image" content="https://cjx132.github.io/picture-bed/img/image-20210407143527558.png">
+<meta property="article:published_time" content="2021-03-22T07:33:12.000Z">
+<meta property="article:modified_time" content="2026-09-13T13:56:00.273Z">
+<meta property="article:author" content="cjx132">
+<meta property="article:tag" content="backend">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://cjx132.github.io/picture-bed/img/image-20210407132529704.png">
+
+
+<link rel="canonical" href="https://cjx132.github.io/cjx132/2021/03/22/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/">
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://cjx132.github.io/cjx132/2021/03/22/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/","path":"2021/03/22/操作系统/","title":"操作系统"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>操作系统 | cjx132</title>
+  
+
+
+
+
+
+
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/fancyapps-ui/6.1.14/fancybox/fancybox.umd.js" integrity="sha256-QnJV4HT5r8i89ovZGRD86iynZqHerEbT2xt69vDM36I=" crossorigin="anonymous" defer></script>
+<script src="/cjx132/js/utils.js" defer></script><script src="/cjx132/js/motion.js" defer></script><script src="/cjx132/js/sidebar.js" defer></script><script src="/cjx132/js/next-boot.js" defer></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.5.0/search.js" integrity="sha256-xFC6PJ82SL9b3WkGjFavNiA9gm5z6UBxWPiu4CYjptg=" crossorigin="anonymous" defer></script>
+<script src="/cjx132/js/third-party/search/local-search.js" defer></script>
+
+
+
+
+  <script src="/cjx132/js/third-party/fancybox.js" defer></script>
+
+  <script src="/cjx132/js/third-party/pace.js" defer></script>
+
+
+  
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/cjx132/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-search popup-trigger" aria-label="搜索" role="button">
+      <i class="fa fa-search fa-fw fa-lg"></i>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/cjx132/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">cjx132</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">道阻且长 行则将至</p>
+  </div>
+
+  <div class="site-nav-toggle" aria-label="切换导航栏" role="button">
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu">
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  
+  <template id="search-popup-template"><div class="search-pop-overlay">
+    <div class="popup search-popup">
+      <div class="search-header">
+        <span class="search-icon">
+          <i class="fa fa-search"></i>
+        </span>
+        <div class="search-input-container">
+          <input autocomplete="off" autocapitalize="off" maxlength="80"
+                placeholder="搜索..." spellcheck="false"
+                type="search" class="search-input">
+        </div>
+        <span class="popup-btn-close" role="button">
+          <i class="fa fa-times-circle"></i>
+        </span>
+      </div>
+      <div class="search-result-container">
+        <div class="search-result-icon">
+          <i class="fa fa-spinner fa-pulse fa-5x"></i>
+        </div>
+      </div>
+    </div>
+  </div></template>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#IO%E5%A4%9A%E8%B7%AF%E5%A4%8D%E7%94%A8"><span class="nav-number">1.</span> <span class="nav-text">IO多路复用</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8D%8F%E7%A8%8B"><span class="nav-number">2.</span> <span class="nav-text">协程</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%BA%BF%E7%A8%8B%E3%80%81%E5%8D%8F%E7%A8%8B%E6%AF%94%E8%BE%83"><span class="nav-number">2.1.</span> <span class="nav-text">线程、协程比较</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%A1%AC%E4%B8%AD%E6%96%AD%E5%92%8C%E8%BD%AF%E4%B8%AD%E6%96%AD%E7%9A%84%E5%8C%BA%E5%88%AB"><span class="nav-number">3.</span> <span class="nav-text">硬中断和软中断的区别</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%94%A8%E6%88%B7%E6%80%81%E5%86%85%E6%A0%B8%E6%80%81"><span class="nav-number">4.</span> <span class="nav-text">用户态内核态</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%BF%9B%E7%A8%8B%E5%88%87%E6%8D%A2"><span class="nav-number">4.1.</span> <span class="nav-text">进程切换</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%90%8C%E6%AD%A5%E5%BC%82%E6%AD%A5"><span class="nav-number">5.</span> <span class="nav-text">同步异步</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%98%BB%E5%A1%9E%E9%9D%9E%E9%98%BB%E5%A1%9E"><span class="nav-number">6.</span> <span class="nav-text">阻塞非阻塞</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%BF%9B%E7%A8%8B%E9%80%9A%E4%BF%A1%E7%BA%BF%E7%A8%8B%E9%80%9A%E4%BF%A1"><span class="nav-number">7.</span> <span class="nav-text">进程通信线程通信</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%BF%9B%E7%A8%8B%E9%80%9A%E4%BF%A1"><span class="nav-number">7.1.</span> <span class="nav-text">进程通信</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%BA%BF%E7%A8%8B%E9%80%9A%E4%BF%A1"><span class="nav-number">7.2.</span> <span class="nav-text">线程通信</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%9D%A2%E8%AF%95%E5%9B%9E%E7%AD%94%E4%B8%BE%E4%BE%8B"><span class="nav-number">8.</span> <span class="nav-text">面试回答举例</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%BF%9B%E7%A8%8B%E4%B8%8E%E7%BA%BF%E7%A8%8B%E7%9A%84%E5%8C%BA%E5%88%AB"><span class="nav-number">8.1.</span> <span class="nav-text">进程与线程的区别</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8F%AF%E4%BB%A5%E7%94%A8%E4%BB%80%E4%B9%88%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E6%9D%A5%E5%AE%9E%E7%8E%B0%E9%98%9F%E5%88%97%EF%BC%9F"><span class="nav-number">8.2.</span> <span class="nav-text">可以用什么数据结构来实现队列？</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#hash-table%E5%A4%84%E7%90%86%E5%86%B2%E7%AA%81%E6%9C%89%E5%93%AA%E4%BA%9B%E5%B8%B8%E7%94%A8%E7%9A%84%E6%96%B9%E5%BC%8F"><span class="nav-number">8.3.</span> <span class="nav-text">hash table处理冲突有哪些常用的方式</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%A1%B9%E7%9B%AE%E9%9A%BE%E7%82%B9"><span class="nav-number">8.4.</span> <span class="nav-text">项目难点</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8F%91%E5%B1%95%E5%8E%86%E5%8F%B2"><span class="nav-number">9.</span> <span class="nav-text">发展历史</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="cjx132"
+      src="/cjx132/images/avatar.png">
+  <p class="site-author-name" itemprop="name">cjx132</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/cjx132/archives/">
+          <span class="site-state-item-count">318</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/cjx132/categories/">
+        <span class="site-state-item-count">13</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/cjx132/tags/">
+        <span class="site-state-item-count">47</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://cjx132.github.io/cjx132/2021/03/22/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/cjx132/images/avatar.png">
+      <meta itemprop="name" content="cjx132">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="cjx132">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="操作系统 | cjx132">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          操作系统
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2021-03-22 15:33:12" itemprop="dateCreated datePublished" datetime="2021-03-22T15:33:12+08:00">2021-03-22</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2026-09-13 21:56:00" itemprop="dateModified" datetime="2026-09-13T21:56:00+08:00">2026-09-13</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/cjx132/categories/Top150/" itemprop="url" rel="index"><span itemprop="name">Top150</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><h2 id="IO多路复用"><a href="#IO多路复用" class="headerlink" title="IO多路复用"></a>IO多路复用</h2><p><img src="https://cjx132.github.io/picture-bed/img/image-20210407132529704.png" alt="image-20210407132529704"></p>
+<p><img src="https://cjx132.github.io/picture-bed/img/image-20210323123505124.png" alt="image-20210323123505124"></p>
+<p><img src="https://cjx132.github.io/picture-bed/img/image-20210407140321862.png" alt="image-20210407140321862"></p>
+<p><img src="https://cjx132.github.io/picture-bed/img/image-20210407141024664.png" alt="image-20210407141024664"></p>
+<p><img src="https://cjx132.github.io/picture-bed/img/image-20210407142227476.png" alt="image-20210407142227476"></p>
+<p><img src="https://cjx132.github.io/picture-bed/img/image-20210407143527558.png" alt="image-20210407143527558"></p>
+<h2 id="协程"><a href="#协程" class="headerlink" title="协程"></a>协程</h2><p><a target="_blank" rel="noopener" href="https://www.jianshu.com/p/8cf31f670d0a">https://www.jianshu.com/p/8cf31f670d0a</a></p>
+<p>协程：<strong>由线程创建的执行体</strong>；由于用户程序不能操作内核空间，只能给协程分配用户栈，操作系统对协程一无所知；协程又被称为用户态线程；</p>
+<p>创建协程时指定程序入口，分配协程执行栈和控制信息（实现用户态调度）；让出执行权时保存执行现场（从中断处恢复执行）。</p>
+<p><strong>协程思想的关键在于控制流的主动让出和恢复</strong>，每个协程拥有自己的执行栈，可以保存自己的执行现场，所以可以由用户程序按需创建协程。</p>
+<p><strong>通过协程实现既轻量又灵活的由用户态进行调度的多任务模型</strong></p>
+<h3 id="线程、协程比较"><a href="#线程、协程比较" class="headerlink" title="线程、协程比较"></a>线程、协程比较</h3><ol>
+<li>一个线程可以多个协程，一个进程也可以单独拥有多个协程，这样python中则能使用多核CPU。</li>
+<li>线程进程都是同步机制，而协程则是异步</li>
+<li>协程能保留上一次调用时的状态，每次过程重入时，就相当于进入上一次调用的状态</li>
+</ol>
+<h2 id="硬中断和软中断的区别"><a href="#硬中断和软中断的区别" class="headerlink" title="硬中断和软中断的区别"></a><strong>硬中断和软中断的区别</strong></h2><ul>
+<li>软中断是执行中断指令产生的，而硬中断是由外设引发的。</li>
+<li>硬中断的中断号是由中断控制器提供的，软中断的中断号由指令直接指出，无需使用中断控制器。</li>
+<li>硬中断是可屏蔽的，软中断不可屏蔽。</li>
+<li>硬中断处理程序要确保它能快速地完成任务，这样程序执行时才不会等待较长时间，称为上半部。</li>
+<li>软中断处理硬中断未完成的工作，是一种推后执行的机制，属于下半部。</li>
+</ul>
+<h2 id="用户态内核态"><a href="#用户态内核态" class="headerlink" title="用户态内核态"></a>用户态内核态</h2><p>用于保证不同进程之间相对独立</p>
+<p>内存空间被划分为两部分，一部分为内核空间，一部分为用户空间</p>
+<p>内核空间存储的代码和数据具有更高级别的权限</p>
+<p>用户空间：内存访问的<strong>相关硬件</strong>在程序执行期间会进行访问控制（ Access Control），使得用户空间的程序不能直接读写内核空间的内存。</p>
+<h3 id="进程切换"><a href="#进程切换" class="headerlink" title="进程切换"></a>进程切换</h3><ol>
+<li>当一个程序正在执行的过程中， <strong>中断（interrupt）</strong> 或 <strong>系统调用（system call）</strong> 发生可以使得 CPU 的控制权会从当前进程转移到操作系统内核。</li>
+</ol>
+<h2 id="同步异步"><a href="#同步异步" class="headerlink" title="同步异步"></a>同步异步</h2><h2 id="阻塞非阻塞"><a href="#阻塞非阻塞" class="headerlink" title="阻塞非阻塞"></a>阻塞非阻塞</h2><h2 id="进程通信线程通信"><a href="#进程通信线程通信" class="headerlink" title="进程通信线程通信"></a>进程通信线程通信</h2><ul>
+<li>实际上只有进程间需要通信,同一进程的线程共享地址空间,没有通信的必要，但要做好同步&#x2F;互斥,保护共享的全局变量。</li>
+<li>而进程间通信无论是信号，管道pipe还是共享内存都是由操作系统保证的，是系统调用。</li>
+</ul>
+<h3 id="进程通信"><a href="#进程通信" class="headerlink" title="进程通信"></a>进程通信</h3><p>管道：半双工，数据单向流动；具有父子关系</p>
+<p>命名管道：半双工，数据单向流动；不必具有父子关系</p>
+<p>信号量：信号量是一个<strong>计数器</strong>，可以用来<strong>控制多个进程对共享资源的访问</strong>。它常作为一种<strong>锁机制</strong>，防止某进程正在访问共享资源时，其他进程也访问该资源。因此，主要作为进程间以及同一进程内不同线程之间的同步手段。</p>
+<p>信号：信号是一种比较复杂的通信方式，用于通知接收进程某个事件已经发生。</p>
+<p>消息队列：消息队列是由消息的链表，存放在内核中并由消息队列标识符标识。消息队列克服了信号传递信息少、管道只能承载无格式字节流以及缓冲区大小受限等缺点。</p>
+<p>共享内存：</p>
+<p>套接字：用于不同设备及其间的进程通信</p>
+<h3 id="线程通信"><a href="#线程通信" class="headerlink" title="线程通信"></a>线程通信</h3><p>锁机制：悲观锁，乐观锁，共享内存</p>
+<p>信号量机制：</p>
+<p>信号机制：</p>
+<h2 id="面试回答举例"><a href="#面试回答举例" class="headerlink" title="面试回答举例"></a>面试回答举例</h2><h3 id="进程与线程的区别"><a href="#进程与线程的区别" class="headerlink" title="进程与线程的区别"></a>进程与线程的区别</h3><p>那么简单地说线程是调度的最小单位，同一个进程的线程共享地址空间，容易有线程安全问题；进程是多数资源分配的最小单位，所以进程的地址空间都是独立的，资源安全问题相对较少。</p>
+<h3 id="可以用什么数据结构来实现队列？"><a href="#可以用什么数据结构来实现队列？" class="headerlink" title="可以用什么数据结构来实现队列？"></a>可以用什么数据结构来实现队列？</h3><p>回答可以说是链表，接着可以补一句但是链表实现队列的性能不一定很好，因为链表节点的地址空间不是连续的，对cache不友好</p>
+<h3 id="hash-table处理冲突有哪些常用的方式"><a href="#hash-table处理冲突有哪些常用的方式" class="headerlink" title="hash table处理冲突有哪些常用的方式"></a>hash table处理冲突有哪些常用的方式</h3><p>线性探测在实际使用的时候常常需要空间开得比较大，hash table的装载因子需要维持一个一直比较小的状态（比如25%-50%这样），否则的话性能就会很差，因为查询和插入都会频繁地进行长距离的线性探测。而拉链法对空间的利用效率就会比较高。在提供足够的空间的时候，按经验线性探测会比拉链法快很多，比如之前做了个项目，在满足空间条件的时候线性探测会快7倍左右（这是在结合经验谈），原因是线性探测比拉链法对cache更友好（这是基础知识）。</p>
+<h3 id="项目难点"><a href="#项目难点" class="headerlink" title="项目难点"></a>项目难点</h3><p>如做数据库实现，项目中有一个问题是数据库太大，不可能放到内存里，但如果都放硬盘的话又太慢，这是项目中的一个困难点。解决困难点的关键是同时利用内存的速度优势与硬盘的容量优势，设计一个存储分层模型。做实验观察到90%的针对数据库的查询仅集中在10%的数据上。那么解决方案可以是设计一个冷热分离的模型，仅仅在内存中存储一些热（即查询频繁）的数据，而将冷（即查询频率很低）的数据存在硬盘上，同时设定一定的策略定期做冷热数据替换。经过这样的设计之后，数据库的查询速度提升了30倍。</p>
+<h2 id="发展历史"><a href="#发展历史" class="headerlink" title="发展历史"></a>发展历史</h2><ol>
+<li>批处理</li>
+<li>多道（由于IO等事件，由应用主动让出CPU）</li>
+<li>分时（时间片的轮转，被动让出CPU，使得短作业可以得到执行，从这个角度上来说提升了效率）</li>
+</ol>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/cjx132/tags/backend/" rel="tag"># backend</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/cjx132/2021/03/21/Top150/%E8%A1%A8%E8%BE%BE%E5%BC%8F%E8%AE%A1%E7%AE%97-%E5%A4%9A%E4%BD%8D%E6%95%B0%E3%80%81%E6%8B%AC%E5%8F%B7%E3%80%81%E5%B0%8F%E6%95%B0%E7%82%B9/" rel="prev" title="表达式计算(多位数、括号、小数点)">
+                  <i class="fa fa-angle-left"></i> 表达式计算(多位数、括号、小数点)
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/cjx132/2021/04/03/MySQL45%E8%AE%B2%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/01%E8%AE%B2%E5%9F%BA%E7%A1%80%E6%9E%B6%E6%9E%84-%E6%9F%A5%E8%AF%A2%E8%AF%AD%E5%8F%A5%E7%9A%84%E6%89%A7%E8%A1%8C/" rel="next" title="01讲基础架构-查询语句的执行">
+                  01讲基础架构-查询语句的执行 <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2026</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">cjx132</span>
+  </div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+</body>
+</html>

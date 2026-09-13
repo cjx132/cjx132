@@ -1,0 +1,614 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: dark)"><meta name="generator" content="Hexo 7.1.1">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/cjx132/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/cjx132/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/cjx132/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/cjx132/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/cjx132/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.3.1/css/all.min.css" integrity="sha256-4Lad8m4ZWW1Lgb9+sMVLYEfnIh7BjV1NQMEe79Pviks=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancyapps-ui/6.1.14/fancybox/fancybox.css" integrity="sha256-mdaMxrItEW6hMIVJJNPKuX0B7KCSJQVEv3mVY4N2we4=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/pace/1.2.4/themes/blue/pace-theme-minimal.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pace/1.2.4/pace.min.js" integrity="sha256-gqd7YTjg/BtfqWSwsJOvndl0Bxc8gFImLEkXQT8+qj0=" crossorigin="anonymous" defer></script>
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"cjx132.github.io","root":"/cjx132/","images":"/cjx132/images","scheme":"Gemini","darkmode":true,"version":"8.29.0","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"hljswrap":true,"codeblock":{"theme":{"light":"default","dark":"stackoverflow-dark"},"prism":{"light":"prism","dark":"prism-dark"},"copy_button":{"enable":true,"style":"mac"},"fold":{"enable":false,"height":500},"language":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"duration":200,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/cjx132/search.xml","localsearch":{"enable":true,"top_n_per_article":5,"unescape":false,"preload":true}}</script><script src="/cjx132/js/config.js" defer></script>
+
+    <meta name="description" content="动态规划入门满足的条件  子问题范围更小，且子问题个数有限 最优子结构：原问题的目标值，一定是由子问题的目标值转移而来 无后效性：子问题的目标值求解仅局限于子问题的规模，与由哪个母状态转移而来无关   记忆化搜索 优点是： 记忆化搜索可以实现然而普通递推不能实现的问题（或实现起来非常麻烦的问题） 记忆化搜索通常是用在递推关系不那么明确的情况下，使用记忆化可以避免考虑复杂的DP顺序 缺点是： 带来系">
+<meta property="og:type" content="article">
+<meta property="og:title" content="动态规划模板">
+<meta property="og:url" content="https://cjx132.github.io/cjx132/2020/11/27/Top150/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92%E6%A8%A1%E6%9D%BF/index.html">
+<meta property="og:site_name" content="cjx132">
+<meta property="og:description" content="动态规划入门满足的条件  子问题范围更小，且子问题个数有限 最优子结构：原问题的目标值，一定是由子问题的目标值转移而来 无后效性：子问题的目标值求解仅局限于子问题的规模，与由哪个母状态转移而来无关   记忆化搜索 优点是： 记忆化搜索可以实现然而普通递推不能实现的问题（或实现起来非常麻烦的问题） 记忆化搜索通常是用在递推关系不那么明确的情况下，使用记忆化可以避免考虑复杂的DP顺序 缺点是： 带来系">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://pic2.zhimg.com/v2-5e39d4aa37e0e0dc8867c4a831305b68_1440w.jpg?source=172ae18b">
+<meta property="og:image" content="https://cjx132.github.io/picture-bed/img/image-20201227235511829.png">
+<meta property="og:image" content="https://cjx132.github.io/picture-bed/img/image-20201227235104677.png">
+<meta property="article:published_time" content="2020-11-27T03:19:52.000Z">
+<meta property="article:modified_time" content="2026-09-13T13:55:59.800Z">
+<meta property="article:author" content="cjx132">
+<meta property="article:tag" content="动态规划">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://pic2.zhimg.com/v2-5e39d4aa37e0e0dc8867c4a831305b68_1440w.jpg?source=172ae18b">
+
+
+<link rel="canonical" href="https://cjx132.github.io/cjx132/2020/11/27/Top150/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92%E6%A8%A1%E6%9D%BF/">
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://cjx132.github.io/cjx132/2020/11/27/Top150/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92%E6%A8%A1%E6%9D%BF/","path":"2020/11/27/Top150/动态规划模板/","title":"动态规划模板"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>动态规划模板 | cjx132</title>
+  
+
+
+
+
+
+
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/fancyapps-ui/6.1.14/fancybox/fancybox.umd.js" integrity="sha256-QnJV4HT5r8i89ovZGRD86iynZqHerEbT2xt69vDM36I=" crossorigin="anonymous" defer></script>
+<script src="/cjx132/js/utils.js" defer></script><script src="/cjx132/js/motion.js" defer></script><script src="/cjx132/js/sidebar.js" defer></script><script src="/cjx132/js/next-boot.js" defer></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.5.0/search.js" integrity="sha256-xFC6PJ82SL9b3WkGjFavNiA9gm5z6UBxWPiu4CYjptg=" crossorigin="anonymous" defer></script>
+<script src="/cjx132/js/third-party/search/local-search.js" defer></script>
+
+
+
+
+  <script src="/cjx132/js/third-party/fancybox.js" defer></script>
+
+  <script src="/cjx132/js/third-party/pace.js" defer></script>
+
+
+  
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/cjx132/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-search popup-trigger" aria-label="搜索" role="button">
+      <i class="fa fa-search fa-fw fa-lg"></i>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/cjx132/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">cjx132</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">道阻且长 行则将至</p>
+  </div>
+
+  <div class="site-nav-toggle" aria-label="切换导航栏" role="button">
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu">
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  
+  <template id="search-popup-template"><div class="search-pop-overlay">
+    <div class="popup search-popup">
+      <div class="search-header">
+        <span class="search-icon">
+          <i class="fa fa-search"></i>
+        </span>
+        <div class="search-input-container">
+          <input autocomplete="off" autocapitalize="off" maxlength="80"
+                placeholder="搜索..." spellcheck="false"
+                type="search" class="search-input">
+        </div>
+        <span class="popup-btn-close" role="button">
+          <i class="fa fa-times-circle"></i>
+        </span>
+      </div>
+      <div class="search-result-container">
+        <div class="search-result-icon">
+          <i class="fa fa-spinner fa-pulse fa-5x"></i>
+        </div>
+      </div>
+    </div>
+  </div></template>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92%E5%85%A5%E9%97%A8"><span class="nav-number">1.</span> <span class="nav-text">动态规划入门</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%BB%A1%E8%B6%B3%E7%9A%84%E6%9D%A1%E4%BB%B6"><span class="nav-number">1.1.</span> <span class="nav-text">满足的条件</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%AE%B0%E5%BF%86%E5%8C%96%E6%90%9C%E7%B4%A2"><span class="nav-number">1.2.</span> <span class="nav-text">记忆化搜索</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%80%92%E6%8E%A8"><span class="nav-number">1.3.</span> <span class="nav-text">递推</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%A4%8D%E6%9D%82%E5%BA%A6"><span class="nav-number">1.4.</span> <span class="nav-text">复杂度</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%A7%A3%E9%A2%98%E6%AD%A5%E9%AA%A4"><span class="nav-number">1.5.</span> <span class="nav-text">解题步骤</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%BB%8F%E5%85%B8%E4%BE%8B%E9%A2%98"><span class="nav-number">1.6.</span> <span class="nav-text">经典例题</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%80%BB%E7%BB%93"><span class="nav-number">1.7.</span> <span class="nav-text">总结</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E8%83%8C%E5%8C%85%E6%A8%A1%E5%9E%8B"><span class="nav-number">2.</span> <span class="nav-text">背包模型</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#01%E8%83%8C%E5%8C%85"><span class="nav-number">2.1.</span> <span class="nav-text">01背包</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#code"><span class="nav-number">2.1.1.</span> <span class="nav-text">code</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%A4%8D%E6%9D%82%E5%BA%A6-1"><span class="nav-number">2.1.2.</span> <span class="nav-text">复杂度</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AE%8C%E5%85%A8%E8%83%8C%E5%8C%85"><span class="nav-number">2.2.</span> <span class="nav-text">完全背包</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#code-1"><span class="nav-number">2.2.1.</span> <span class="nav-text">code</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%A4%8D%E6%9D%82%E5%BA%A6-2"><span class="nav-number">2.2.2.</span> <span class="nav-text">复杂度</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%A4%9A%E9%87%8D%E8%83%8C%E5%8C%85"><span class="nav-number">2.3.</span> <span class="nav-text">多重背包</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#code-2"><span class="nav-number">2.3.1.</span> <span class="nav-text">code</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%80%9D%E8%B7%AF3%EF%BC%9A"><span class="nav-number">2.3.1.1.</span> <span class="nav-text">思路3：</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%80%9D%E8%B7%AF4%EF%BC%9A"><span class="nav-number">2.3.1.2.</span> <span class="nav-text">思路4：</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%9C%80%E4%BC%98%E5%A4%8D%E6%9D%82%E5%BA%A6"><span class="nav-number">2.3.2.</span> <span class="nav-text">最优复杂度</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%8A%B6%E6%80%81%E6%9C%BA%E6%A8%A1%E5%9E%8B"><span class="nav-number">3.</span> <span class="nav-text">状态机模型</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%95%B0%E5%AD%97%E4%B8%89%E8%A7%92%E5%BD%A2%E6%A8%A1%E5%9E%8B"><span class="nav-number">4.</span> <span class="nav-text">数字三角形模型</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%9C%80%E9%95%BF%E4%B8%8A%E5%8D%87%E5%AD%90%E5%BA%8F%E5%88%97%E6%A8%A1%E5%9E%8B"><span class="nav-number">5.</span> <span class="nav-text">最长上升子序列模型</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%8A%B6%E6%80%81%E5%8E%8B%E7%BC%A9DP"><span class="nav-number">6.</span> <span class="nav-text">状态压缩DP</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%8C%BA%E9%97%B4DP"><span class="nav-number">7.</span> <span class="nav-text">区间DP</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%BD%AC%E7%A7%BB%E6%80%9D%E6%83%B31-%E6%9E%9A%E4%B8%BEk%E8%BF%9B%E8%A1%8C%E5%88%92%E5%88%86"><span class="nav-number">7.1.</span> <span class="nav-text">转移思想1&#x3D;&#x3D;&gt;枚举k进行划分</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%A8%A1%E6%9D%BF"><span class="nav-number">7.1.1.</span> <span class="nav-text">模板</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%BB%8F%E5%85%B8%E4%BE%8B%E9%A2%98-1"><span class="nav-number">7.1.2.</span> <span class="nav-text">经典例题</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%BD%AC%E7%A7%BB%E6%80%9D%E6%83%B32-%E5%92%8CL%E3%80%81R%E5%B7%A6%E5%8F%B3%E8%BE%B9%E7%95%8C%E6%9C%89%E5%85%B3%EF%BC%88%E5%9B%9E%E6%96%87%E3%80%81%E6%9F%93%E8%89%B2%E7%9B%B8%E5%85%B3%EF%BC%89"><span class="nav-number">7.2.</span> <span class="nav-text">转移思想2&#x3D;&#x3D;&gt;和L、R左右边界有关（回文、染色相关）</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%BB%8F%E5%85%B8%E4%BE%8B%E9%A2%98-2"><span class="nav-number">7.2.1.</span> <span class="nav-text">经典例题</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%A0%91%E5%BD%A2DP"><span class="nav-number">8.</span> <span class="nav-text">树形DP</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%95%B0%E4%BD%8DDP"><span class="nav-number">9.</span> <span class="nav-text">数位DP</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%BB%8F%E5%85%B8%E4%BE%8B%E9%A2%98-3"><span class="nav-number">9.1.</span> <span class="nav-text">经典例题</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%8D%95%E8%B0%83%E9%98%9F%E5%88%97%E4%BC%98%E5%8C%96DP"><span class="nav-number">10.</span> <span class="nav-text">单调队列优化DP</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%96%9C%E7%8E%87%E4%BC%98%E5%8C%96DP"><span class="nav-number">11.</span> <span class="nav-text">斜率优化DP</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="cjx132"
+      src="/cjx132/images/avatar.png">
+  <p class="site-author-name" itemprop="name">cjx132</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/cjx132/archives/">
+          <span class="site-state-item-count">318</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/cjx132/categories/">
+        <span class="site-state-item-count">13</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/cjx132/tags/">
+        <span class="site-state-item-count">47</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://cjx132.github.io/cjx132/2020/11/27/Top150/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92%E6%A8%A1%E6%9D%BF/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/cjx132/images/avatar.png">
+      <meta itemprop="name" content="cjx132">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="cjx132">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="动态规划模板 | cjx132">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          动态规划模板
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2020-11-27 11:19:52" itemprop="dateCreated datePublished" datetime="2020-11-27T11:19:52+08:00">2020-11-27</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2026-09-13 21:55:59" itemprop="dateModified" datetime="2026-09-13T21:55:59+08:00">2026-09-13</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/cjx132/categories/Top150/" itemprop="url" rel="index"><span itemprop="name">Top150</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><h1 id="动态规划入门"><a href="#动态规划入门" class="headerlink" title="动态规划入门"></a>动态规划入门</h1><h2 id="满足的条件"><a href="#满足的条件" class="headerlink" title="满足的条件"></a>满足的条件</h2><blockquote>
+<ol>
+<li>子问题范围更小，且子问题个数有限</li>
+<li><strong>最优子结构</strong>：<strong>原问题的目标值，一定是由子问题的目标值转移而来</strong></li>
+<li><strong>无后效性</strong>：<strong>子问题的目标值求解仅局限于子问题的规模，与由哪个母状态转移而来无关</strong></li>
+</ol>
+</blockquote>
+<h2 id="记忆化搜索"><a href="#记忆化搜索" class="headerlink" title="记忆化搜索"></a>记忆化搜索</h2><blockquote>
+<p>优点是：</p>
+<p>记忆化搜索可以实现然而普通递推不能实现的问题（或实现起来非常麻烦的问题）</p>
+<p><strong>记忆化搜索通常是用在递推关系不那么明确的情况下，使用记忆化可以避免考虑复杂的DP顺序</strong></p>
+<p>缺点是：</p>
+<p>带来系统栈占用，导致程序性能下降。</p>
+</blockquote>
+<h2 id="递推"><a href="#递推" class="headerlink" title="递推"></a>递推</h2><blockquote>
+<p>常见于需要<strong>优化</strong>（<strong>重点</strong>）的DP</p>
+<p>保证求解状态的时候，子问题都已经被计算过</p>
+<p><strong>需要考虑如何枚举，才能先计算出规模更小的子问题</strong></p>
+<p>通常有这样一个技巧：<strong>状态转移方程中，如果是减法，就正序计算；如果是加法，就倒序计算。（优化空间复杂度时除外）</strong></p>
+</blockquote>
+<h2 id="复杂度"><a href="#复杂度" class="headerlink" title="复杂度"></a>复杂度</h2><blockquote>
+<p>无论递推还是递归本质都是遍历整个图</p>
+<p>复杂度就是遍历这个图的复杂度</p>
+<p><strong>点数：状态数</strong></p>
+<p><strong>边数：状态数*转移数</strong></p>
+<p><strong>复杂度：状态数*转移数</strong></p>
+</blockquote>
+<h2 id="解题步骤"><a href="#解题步骤" class="headerlink" title="解题步骤"></a>解题步骤</h2><blockquote>
+<ol>
+<li>定义问题状态:定义问题的状态（<strong>也就是递归树中的点</strong>），以及目标值</li>
+<li>考虑状态转移:考虑当前状态做出的选择（<strong>也就是递归树中的边</strong>），得到当前状态转移成的子状态，问题规模得到减小。</li>
+<li>递归或递推解决子问题:解决规模更小的子问题，并通过子问题的结果更新答案。定义最小的子问题的初始值。</li>
+</ol>
+</blockquote>
+<h2 id="经典例题"><a href="#经典例题" class="headerlink" title="经典例题"></a>经典例题</h2><ul>
+<li><p>最长连续上升子序列</p>
+<blockquote>
+<ol>
+<li>定义状态: dp[i]表示以位 置i结尾的最长连续上升子序列长度</li>
+<li>考虑转移: if a[i]&gt;a[i-1]: dp[i]&#x3D;dp[i-1]+1 else dp[i]&#x3D;1</li>
+</ol>
+</blockquote>
+</li>
+<li><p>最长上升子序列</p>
+<blockquote>
+<ol>
+<li>定义状态: dp[i表示以位 置i结尾的最长上升子序列长度</li>
+<li>考虑转移: for each j&lt;i if a[i]&gt;a[j]: dp[i]&#x3D;dp[j]+1</li>
+</ol>
+</blockquote>
+</li>
+<li><p>最长回文子序列</p>
+<blockquote>
+<ol>
+<li>定义状态: <code>dp[i][j]</code>表示只考 虑序列i~j部分的最长回文子序列长度</li>
+<li>考虑转移: <code>dp[i][j]=max(dp[i+ 1][j],dp[i][j-1])</code> ；<code>if (a[i]==a[j]) dp[i][j]=max(dp[i][j],dp[i+1][j-1]+2)</code></li>
+</ol>
+</blockquote>
+</li>
+<li><p>最长公共子序列</p>
+<blockquote>
+<ol>
+<li>定义状态: <code>dp[i][j]</code>表示只考虑第一个序列的前i个，第二个序列的前j个的答案</li>
+<li>考虑转移: <code>dp[i][j]=max(dp[i-1][j],dp[i][j-1])</code> ；<code>if (a[i]==b[j]) dp[i][j]=max(dp[i][j],dp[i-1][j-1]+1)</code></li>
+</ol>
+</blockquote>
+</li>
+</ul>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><blockquote>
+<ol>
+<li><p>动态规划本质即为递归子问题+备忘录空间换时间</p>
+</li>
+<li><p>三步解题法:定义<strong>状态（根据经验，熟悉几种dp模型）</strong>，<strong>重点：考虑转移（思路，去想当前状态或问题有哪几种子问题）</strong>，递归&#x2F;递推</p>
+<blockquote>
+<ol>
+<li><p><strong>状态的定义一般根据经验，熟悉几种dp模型</strong></p>
+</li>
+<li><p>转移：从集合的角度去想<strong>当前状态有哪几种子问题（分治的思想）</strong>，考虑当前状态的子问题时要做到<strong>不重不漏</strong>。</p>
+<blockquote>
+<p><strong>很重要的划分依据：”最后”</strong></p>
+</blockquote>
+</li>
+</ol>
+</blockquote>
+</li>
+<li><p><strong>递归写法为记忆化搜索，递推写法为从小状态枚举到大状态</strong></p>
+</li>
+<li><p>复杂度为状态*转移</p>
+</li>
+</ol>
+</blockquote>
+<p>代码编写</p>
+<ol>
+<li>dp数组的初始化</li>
+</ol>
+<h1 id="背包模型"><a href="#背包模型" class="headerlink" title="背包模型"></a>背包模型</h1><p>01背包和完全背包理解状态和状态转移即可，至于空间复杂度优化可以自己优化</p>
+<p>多重背包知道二进制优化即可，即如何转化为01背包问题</p>
+<p>01背包： <code>dp[i][j]=max(dp[i-1][j],dp[i-1][j-v]+w)</code></p>
+<p>完全背包：<code>dp[i][j]=max(dp[i-1][j],dp[i][j-v]+w)</code></p>
+<h2 id="01背包"><a href="#01背包" class="headerlink" title="01背包"></a>01背包</h2><p>每种物品只有一个，只能取一次</p>
+<h3 id="code"><a href="#code" class="headerlink" title="code"></a>code</h3><p>朴素写法：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span>(<span class="type">int</span> i=<span class="number">1</span>;i&lt;=N;i++)&#123;</span><br><span class="line">    <span class="keyword">for</span>(<span class="type">int</span> j=<span class="number">0</span>;j&lt;=V;j++)&#123;</span><br><span class="line">        dp[i][j]=dp[i<span class="number">-1</span>][j];</span><br><span class="line">        <span class="keyword">if</span>(j&gt;=cost[i])&#123;</span><br><span class="line">            dp[i][j]=<span class="built_in">max</span>(dp[i][j],dp[i<span class="number">-1</span>][j-cost[i]]+value[i]);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line">cout&lt;&lt;dp[N][V]&lt;&lt;endl;</span><br></pre></td></tr></table></figure>
+
+<p>优化写法：注意遍历顺序是<strong>倒序</strong></p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span>(<span class="type">int</span> i=<span class="number">1</span>;i&lt;=N;i++)&#123;</span><br><span class="line">    <span class="keyword">for</span>(<span class="type">int</span> j=V;j&gt;=<span class="number">0</span>;j--)&#123;</span><br><span class="line">        dp[j]=dp[j];</span><br><span class="line">        <span class="keyword">if</span>(j&gt;=cost[i])&#123;</span><br><span class="line">            dp[j]=<span class="built_in">max</span>(dp[j],dp[j-cost[i]]+value[i]);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line">cout&lt;&lt;dp[V]&lt;&lt;endl;</span><br></pre></td></tr></table></figure>
+
+<h3 id="复杂度-1"><a href="#复杂度-1" class="headerlink" title="复杂度"></a>复杂度</h3><ul>
+<li><p>时间复杂度：O(NV)</p>
+</li>
+<li><p>空间复杂度：O(V)</p>
+<h2 id="完全背包"><a href="#完全背包" class="headerlink" title="完全背包"></a>完全背包</h2></li>
+</ul>
+<p>每种物品无限个，可以取不限制次数的取</p>
+<p><strong>此时状态转移的含义是：是否取一种物品的其中一个</strong></p>
+<h3 id="code-1"><a href="#code-1" class="headerlink" title="code"></a>code</h3><p>朴素写法</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span>(<span class="type">int</span> i=<span class="number">1</span>;i&lt;=N;i++)&#123;</span><br><span class="line">    <span class="keyword">for</span>(<span class="type">int</span> j=<span class="number">0</span>;j&lt;=V;j++)&#123;</span><br><span class="line">        dp[i][j]=dp[i<span class="number">-1</span>][j];</span><br><span class="line">        <span class="keyword">if</span>(j&gt;=cost[i])&#123;</span><br><span class="line">            dp[i][j]=<span class="built_in">max</span>(dp[i][j],dp[i][j-cost[i]]+value[i]);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line">cout&lt;&lt;dp[N][V]&lt;&lt;endl;</span><br></pre></td></tr></table></figure>
+
+<p>优化写法</p>
+<p>注意遍历顺序是 <strong>正序</strong></p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span>(<span class="type">int</span> i=<span class="number">1</span>;i&lt;=N;i++)&#123;</span><br><span class="line">    <span class="keyword">for</span>(<span class="type">int</span> j=<span class="number">0</span>;j&lt;=V;j++)&#123;</span><br><span class="line">        dp[j]=dp[j];</span><br><span class="line">        <span class="keyword">if</span>(j&gt;=cost[i])&#123;</span><br><span class="line">            dp[j]=<span class="built_in">max</span>(dp[j],dp[j-cost[i]]+value[i]);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line">cout&lt;&lt;dp[V]&lt;&lt;endl;</span><br></pre></td></tr></table></figure>
+
+<h3 id="复杂度-2"><a href="#复杂度-2" class="headerlink" title="复杂度"></a>复杂度</h3><ul>
+<li>时间复杂度：O(NV)</li>
+<li>空间复杂度：O(V)</li>
+</ul>
+<h2 id="多重背包"><a href="#多重背包" class="headerlink" title="多重背包"></a>多重背包</h2><p>每种物品有cnt[i]个</p>
+<p>思路1：完全背包思路1暴力法中加上cnt[i]进行限制</p>
+<p>思路2：每种物品拆解成cnt[i]个物品，转化为01背包问题。但是这种拆解方法复杂度较高，可以进行二进制优化</p>
+<p>思路3：对思路2采用二进制拆分。每种物品拆分为若干个之后，分别计算这几个物品的value和cost，进行01背包求解</p>
+<p>思路4：单调队列优化</p>
+<h3 id="code-2"><a href="#code-2" class="headerlink" title="code"></a>code</h3><h4 id="思路3："><a href="#思路3：" class="headerlink" title="思路3："></a>思路3：</h4><p>第一步：二进制拆分代码如下</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="type">void</span> <span class="title">f</span><span class="params">(<span class="type">int</span> n,vector&lt;<span class="type">int</span>&gt;&amp; res)</span></span>&#123;</span><br><span class="line">    <span class="type">int</span> cnt=<span class="number">1</span>;</span><br><span class="line">    <span class="keyword">while</span>(cnt&lt;n)&#123;</span><br><span class="line">        res.<span class="built_in">push_back</span>(cnt);</span><br><span class="line">        n-=cnt;</span><br><span class="line">        cnt*=<span class="number">2</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    res.<span class="built_in">push_back</span>(n);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>第二步：分别计算上面拆分出来的这几个物品的value和cost，加入value和cost数组</p>
+<p>第三步：01背包部分的代码这里就不放出来了</p>
+<h4 id="思路4："><a href="#思路4：" class="headerlink" title="思路4："></a>思路4：</h4><p>暂时不理解</p>
+<h3 id="最优复杂度"><a href="#最优复杂度" class="headerlink" title="最优复杂度"></a>最优复杂度</h3><ul>
+<li>时间复杂度：O(NV)</li>
+<li>空间复杂度：O(V)</li>
+</ul>
+<h1 id="状态机模型"><a href="#状态机模型" class="headerlink" title="状态机模型"></a>状态机模型</h1><h1 id="数字三角形模型"><a href="#数字三角形模型" class="headerlink" title="数字三角形模型"></a>数字三角形模型</h1><h1 id="最长上升子序列模型"><a href="#最长上升子序列模型" class="headerlink" title="最长上升子序列模型"></a>最长上升子序列模型</h1><h1 id="状态压缩DP"><a href="#状态压缩DP" class="headerlink" title="状态压缩DP"></a>状态压缩DP</h1><h1 id="区间DP"><a href="#区间DP" class="headerlink" title="区间DP"></a>区间DP</h1><h2 id="转移思想1-枚举k进行划分"><a href="#转移思想1-枚举k进行划分" class="headerlink" title="转移思想1&#x3D;&#x3D;&gt;枚举k进行划分"></a>转移思想1&#x3D;&#x3D;&gt;枚举k进行划分</h2><p>先对小区间进行求解，然后再利用小区间的最优解<strong>合并</strong>求得大区间的最优解。<strong>区间dp的思想类似于记忆化搜索-&gt;迭代k-&gt;后续遍历（包含合并操作）</strong></p>
+<h3 id="模板"><a href="#模板" class="headerlink" title="模板"></a>模板</h3><ol>
+<li><p>定义状态：状态为DP(L,R)表示(L~R)区间的最优解</p>
+</li>
+<li><p>考虑转移：转移为枚举区间划分点<strong>DP(L,R)&#x3D;DP(L,K)+DP(K+1,R)+cost(L,R,K)</strong></p>
+<blockquote>
+<p><strong>k的范围的确定这样想：我需要划分为子问题，因此新划分的区间要比当前的小</strong>=&#x3D;&gt;思考一下石子合并问题的k的范围</p>
+</blockquote>
+</li>
+<li><p>递归递推求解子状态：递推为从短的枚举到长的，同时思考区间长度为1的初始化问题&#x3D;&#x3D;&gt;思考一下石子合并问题的枚举</p>
+</li>
+<li><p>复杂度分析：状态O(N^2) 转移O(N)，总复杂度O(N^3)</p>
+</li>
+<li><p>结合石子合并例题即可理解透彻</p>
+</li>
+<li><p><strong>写代码注意的地方【重要】</strong></p>
+<blockquote>
+<ol>
+<li><strong>初始化dp数组为最大或者最小</strong></li>
+<li><strong>如何划分区间；K的取值范围(要保证：不能划分之后问题规模没有减小，不能出现和原问题相同的子问题)</strong></li>
+<li><strong>枚举区间时从区间长度为2的地方开始枚举（不一定是2，具体问题具体分析，划分多边形问题从3开始，恐狼先锋从1开始）</strong></li>
+<li><strong>枚举区间之前，先处理枚举起点之前的dp数组的值</strong></li>
+<li><strong>求最大最小值（遍历K之前）之前要先给定一个极小或者极大值</strong></li>
+</ol>
+</blockquote>
+</li>
+</ol>
+<h3 id="经典例题-1"><a href="#经典例题-1" class="headerlink" title="经典例题"></a>经典例题</h3><ul>
+<li>石子合并</li>
+</ul>
+<blockquote>
+<p>状态及状态转移容易想出</p>
+<p><strong>初始值<code>dp[index][index]=0</code></strong>，长度为1初始化为0</p>
+<p>使用递推要先枚举区间长度（<strong>本题区间长度从2开始枚举</strong>）；再枚举左端点（也就确定了右端点）；再枚举区间内的k求出当前的最小值（需要注意k的范围）</p>
+<p><strong>k的范围的确定这样想：我需要划分为子问题，因此新划分的区间要比当前的小</strong></p>
+</blockquote>
+<ul>
+<li>环状石子合并（洛谷P1880）递归递推代码参考本机代码</li>
+</ul>
+<blockquote>
+<ol>
+<li><strong>复制一份原数组，追加到后面即可（这种思想对于解决环状问题很有用）</strong>。之后求[0,2n-1]区间的解。</li>
+<li>1求出的结果中遍历其中区间长度为n的dp数组的值，求出最小即可</li>
+</ol>
+</blockquote>
+<ul>
+<li>矩阵乘法</li>
+</ul>
+<blockquote>
+<p><code>dp[L][R]</code>矩阵区间L~R乘起来最少次数</p>
+<p><code>cost(L,R,K)=a[L]*a[K+1]*a[R+1]</code>含义是：L<del>K区间的矩阵与K+1</del>R区间的矩阵，这两个矩阵乘起来的花费</p>
+<p>需要注意的问题和石子合并问题一样，代码编写基本相同</p>
+</blockquote>
+<ul>
+<li><p>划分多边形</p>
+<blockquote>
+<p><code>dp[L][R]</code>矩阵L~R点构成的多边形的最优值</p>
+<p><code>cost(L,R,K)=w[L]*w[K]*w[R]</code></p>
+<p>区间长度从3开始枚举，区间长度小于3的都初始化为0</p>
+<p>k的取值范围如下：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span>(<span class="type">int</span> k=left<span class="number">+1</span>;k&lt;right;k++)&#123;</span><br><span class="line">    	res=<span class="built_in">min</span>(res,dp[left][k]+dp[k][right]+A[left]*A[k]*A[right]);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></blockquote>
+</li>
+</ul>
+<h2 id="转移思想2-和L、R左右边界有关（回文、染色相关）"><a href="#转移思想2-和L、R左右边界有关（回文、染色相关）" class="headerlink" title="转移思想2&#x3D;&#x3D;&gt;和L、R左右边界有关（回文、染色相关）"></a>转移思想2&#x3D;&#x3D;&gt;和L、R左右边界有关（回文、染色相关）</h2><h3 id="经典例题-2"><a href="#经典例题-2" class="headerlink" title="经典例题"></a>经典例题</h3><ul>
+<li><p>最长回文子序列</p>
+</li>
+<li><p>删除回文<strong>子串</strong></p>
+<blockquote>
+<p>题目</p>
+<p><img src="https://pic2.zhimg.com/v2-5e39d4aa37e0e0dc8867c4a831305b68_1440w.jpg?source=172ae18b" alt="删除回文子串"></p>
+<p>状态转移方程</p>
+<p><code>dp[L,R]=min(dp[L,K]+dp[K+1,R])</code></p>
+<p><code>if(a[L]==a[R]) dp[L,R]=min(dp[L,R],dp[L+1,R-1])</code></p>
+</blockquote>
+</li>
+<li><p>木板染色</p>
+<blockquote>
+<p>给定一个长度为N的木板，初始每个格子都没有颜色，每次可以选择一个连续区间(L,R)染上颜色，问最少多少次操作可以染成目标木板。<br><code>dp[L][R]</code>表示将L~R从全没有颜色染到目标颜色所需最少次数<br><code>dp[L,R]=min(dp[L,K]+dp[K+1,R])</code><br><code>if(a[L]==a[R]) dp[L,R]=min(dp[L,R],dp[L+1,R],dp[L,R-1])</code></p>
+</blockquote>
+</li>
+<li><p>恐狼先锋：HDU5115</p>
+<blockquote>
+<p><code>dp[L][R]</code>为杀死L到R的狼所受到的伤害，然后区间在[L,R]内枚举k作为[L,R]区间中最后一只被杀死的狼，此时最后一只被杀死的狼不会有额外的buff。但是[L,R]区间的左右端点L和R会受到区间之外的额外buff。因此有状态转移方程</p>
+<p><code>dp[L,R]=min(dp[L,R],dp[L,k-1]+dp[k+1,R]+b[L-1]+b[R+1]+a[k]);</code></p>
+<p>从区间长度为1开始枚举</p>
+<p>区间长度为0的处理：<code>if(L&gt;R)</code> <code>dp[L][R]=0</code></p>
+</blockquote>
+</li>
+<li><p>木板染色2：HDU2476</p>
+<blockquote>
+<ol>
+<li><p>先求出把一个空白串刷成B串所需要的最少操作次数，并且不仅仅是整个区间的最少操作次数需要记录，而且每个子区间的最少操作次数也需要记录。记录在dp[l][r]数组中。</p>
+</li>
+<li><p>A串与空白串所不同的地方在于：A串在某些地方可能与B串相同，在这些地方，A串就不要再去刷了，而空白串则必须要刷。所以A串的最少操作次数就可以这样求：</p>
+<p>从第一个位置开始递推，假设当前递推到第i个位置。</p>
+<ol>
+<li><p>如果在第i个位置上，A串与B串相同，那么在i处就不需要处理，直接 f[i] &#x3D; f[i-1] 。</p>
+</li>
+<li><p>如果在第i个位置上，A串与B串不同，那么表明第i个字符必须刷，要刷的话，就要考虑刷多少，即需要考虑往前刷多少个？枚举取最优值。</p>
+</li>
+</ol>
+</li>
+</ol>
+</blockquote>
+</li>
+</ul>
+<h1 id="树形DP"><a href="#树形DP" class="headerlink" title="树形DP"></a>树形DP</h1><h1 id="数位DP"><a href="#数位DP" class="headerlink" title="数位DP"></a>数位DP</h1><p><img src="https://cjx132.github.io/picture-bed/img/image-20201227235511829.png" alt="image-20201227235511829"></p>
+<p>给定一个闭区间[L,R]，求这个区间中满足”某种条件”的数的总数量</p>
+<p><img src="https://cjx132.github.io/picture-bed/img/image-20201227235104677.png" alt="image-20201227235104677"></p>
+<p>代码模板如下：</p>
+<p>代码模板结合下例中的代码记忆。关于上面的图：左边的分支一般可以利用dp直接计算出来；树的一条路径就是一种情况；dp数组初始化之后本质就是根据该树进行分类讨论；注意最右边路径如果满足条件，结果要+1</p>
+<h2 id="经典例题-3"><a href="#经典例题-3" class="headerlink" title="经典例题"></a>经典例题</h2><ul>
+<li><p><a target="_blank" rel="noopener" href="https://vjudge.net/problem/URAL-1057">度的数量</a>—包含k个1：<a target="_blank" rel="noopener" href="https://paste.ubuntu.com/p/zD5mDqShQm/">代码</a></p>
+<p>其实是分类讨论，<code>f[i][j]</code>是组合数，last含义为有多少个1</p>
+</li>
+<li><p><a target="_blank" rel="noopener" href="https://www.luogu.com.cn/problem/P2657">windy数</a>—绝对值大于等于2：<a target="_blank" rel="noopener" href="https://paste.ubuntu.com/p/GfpHXk7vWH/">代码</a></p>
+<p>注意不含前导0，要特判（<code>f[0][x]</code>不能直接算入答案，对于位数小于n的要单独计算）；last保存前一个数；init函数中i从2开始枚举</p>
+</li>
+<li><p><a target="_blank" rel="noopener" href="https://loj.ac/p/10166">数字游戏2</a>—所有数字之和%N为0：<a target="_blank" rel="noopener" href="https://loj.ac/s/1022053">代码</a></p>
+<p><code>f[i][j][k]</code>的含义是共有i位数，最高位是j，这i个数字之和%N余数为k；last保存前缀和；mod函数的重写；init函数中i从2开始枚举</p>
+</li>
+<li><p><a target="_blank" rel="noopener" href="http://acm.hdu.edu.cn/showproblem.php?pid=2089">不要62</a>—：<a target="_blank" rel="noopener" href="https://paste.ubuntu.com/p/W2tVW5YM5h/">代码</a></p>
+<p>last保存的是前一个数；init函数中i从2开始枚举</p>
+</li>
+<li><p><a target="_blank" rel="noopener" href="http://acm.hdu.edu.cn/showproblem.php?pid=4507">恨7不成妻</a>—：<a target="_blank" rel="noopener" href="https://paste.ubuntu.com/p/rrkyyZKxsw/">代码</a></p>
+<p>dp数组保存的是平方和</p>
+</li>
+</ul>
+<h1 id="单调队列优化DP"><a href="#单调队列优化DP" class="headerlink" title="单调队列优化DP"></a>单调队列优化DP</h1><h1 id="斜率优化DP"><a href="#斜率优化DP" class="headerlink" title="斜率优化DP"></a>斜率优化DP</h1>
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/cjx132/tags/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92/" rel="tag"># 动态规划</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/cjx132/2020/11/27/Top150/%E5%88%86%E6%95%B0%E5%88%B0%E5%B0%8F%E6%95%B0/" rel="prev" title="分数到小数">
+                  <i class="fa fa-angle-left"></i> 分数到小数
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/cjx132/2020/11/27/Top150/%E9%80%9A%E9%85%8D%E7%AC%A6%E5%8C%B9%E9%85%8D/" rel="next" title="通配符匹配">
+                  通配符匹配 <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2026</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">cjx132</span>
+  </div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+</body>
+</html>

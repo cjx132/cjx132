@@ -1,0 +1,474 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: dark)"><meta name="generator" content="Hexo 7.1.1">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/cjx132/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/cjx132/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/cjx132/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/cjx132/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/cjx132/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.3.1/css/all.min.css" integrity="sha256-4Lad8m4ZWW1Lgb9+sMVLYEfnIh7BjV1NQMEe79Pviks=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancyapps-ui/6.1.14/fancybox/fancybox.css" integrity="sha256-mdaMxrItEW6hMIVJJNPKuX0B7KCSJQVEv3mVY4N2we4=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/pace/1.2.4/themes/blue/pace-theme-minimal.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pace/1.2.4/pace.min.js" integrity="sha256-gqd7YTjg/BtfqWSwsJOvndl0Bxc8gFImLEkXQT8+qj0=" crossorigin="anonymous" defer></script>
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"cjx132.github.io","root":"/cjx132/","images":"/cjx132/images","scheme":"Gemini","darkmode":true,"version":"8.29.0","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"hljswrap":true,"codeblock":{"theme":{"light":"default","dark":"stackoverflow-dark"},"prism":{"light":"prism","dark":"prism-dark"},"copy_button":{"enable":true,"style":"mac"},"fold":{"enable":false,"height":500},"language":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"duration":200,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/cjx132/search.xml","localsearch":{"enable":true,"top_n_per_article":5,"unescape":false,"preload":true}}</script><script src="/cjx132/js/config.js" defer></script>
+
+    <meta name="description" content="java介于编译型语言和解释型语言之间java把代码编译成“字节码”，针对不同平台分别开发虚拟机，虚拟机加载字节码并执行。 JDK、JRE、JVMJDK组成 编译器、调试器等工具 JRE(运行Java字节码的虚拟机) JVM+Runtime Library    jdk的bin目录下可执行文件 java:就是JVM，执行编译后的字节码 javac:Java编译器，把java源码文件(.java)编">
+<meta property="og:type" content="article">
+<meta property="og:title" content="java入门">
+<meta property="og:url" content="https://cjx132.github.io/cjx132/2019/12/13/Java/java%E5%85%A5%E9%97%A8/index.html">
+<meta property="og:site_name" content="cjx132">
+<meta property="og:description" content="java介于编译型语言和解释型语言之间java把代码编译成“字节码”，针对不同平台分别开发虚拟机，虚拟机加载字节码并执行。 JDK、JRE、JVMJDK组成 编译器、调试器等工具 JRE(运行Java字节码的虚拟机) JVM+Runtime Library    jdk的bin目录下可执行文件 java:就是JVM，执行编译后的字节码 javac:Java编译器，把java源码文件(.java)编">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://cjx132.github.io/cjx132/images/Java/%E6%95%B0%E7%BB%84%E5%86%85%E5%AD%98%E7%A9%BA%E9%97%B4.png">
+<meta property="article:published_time" content="2019-12-13T05:53:58.000Z">
+<meta property="article:modified_time" content="2026-09-13T13:55:56.628Z">
+<meta property="article:author" content="cjx132">
+<meta property="article:tag" content="java基础">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://cjx132.github.io/cjx132/images/Java/%E6%95%B0%E7%BB%84%E5%86%85%E5%AD%98%E7%A9%BA%E9%97%B4.png">
+
+
+<link rel="canonical" href="https://cjx132.github.io/cjx132/2019/12/13/Java/java%E5%85%A5%E9%97%A8/">
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://cjx132.github.io/cjx132/2019/12/13/Java/java%E5%85%A5%E9%97%A8/","path":"2019/12/13/Java/java入门/","title":"java入门"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>java入门 | cjx132</title>
+  
+
+
+
+
+
+
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/fancyapps-ui/6.1.14/fancybox/fancybox.umd.js" integrity="sha256-QnJV4HT5r8i89ovZGRD86iynZqHerEbT2xt69vDM36I=" crossorigin="anonymous" defer></script>
+<script src="/cjx132/js/utils.js" defer></script><script src="/cjx132/js/motion.js" defer></script><script src="/cjx132/js/sidebar.js" defer></script><script src="/cjx132/js/next-boot.js" defer></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.5.0/search.js" integrity="sha256-xFC6PJ82SL9b3WkGjFavNiA9gm5z6UBxWPiu4CYjptg=" crossorigin="anonymous" defer></script>
+<script src="/cjx132/js/third-party/search/local-search.js" defer></script>
+
+
+
+
+  <script src="/cjx132/js/third-party/fancybox.js" defer></script>
+
+  <script src="/cjx132/js/third-party/pace.js" defer></script>
+
+
+  
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/cjx132/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-search popup-trigger" aria-label="搜索" role="button">
+      <i class="fa fa-search fa-fw fa-lg"></i>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/cjx132/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">cjx132</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">道阻且长 行则将至</p>
+  </div>
+
+  <div class="site-nav-toggle" aria-label="切换导航栏" role="button">
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu">
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  
+  <template id="search-popup-template"><div class="search-pop-overlay">
+    <div class="popup search-popup">
+      <div class="search-header">
+        <span class="search-icon">
+          <i class="fa fa-search"></i>
+        </span>
+        <div class="search-input-container">
+          <input autocomplete="off" autocapitalize="off" maxlength="80"
+                placeholder="搜索..." spellcheck="false"
+                type="search" class="search-input">
+        </div>
+        <span class="popup-btn-close" role="button">
+          <i class="fa fa-times-circle"></i>
+        </span>
+      </div>
+      <div class="search-result-container">
+        <div class="search-result-icon">
+          <i class="fa fa-spinner fa-pulse fa-5x"></i>
+        </div>
+      </div>
+    </div>
+  </div></template>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#java%E4%BB%8B%E4%BA%8E%E7%BC%96%E8%AF%91%E5%9E%8B%E8%AF%AD%E8%A8%80%E5%92%8C%E8%A7%A3%E9%87%8A%E5%9E%8B%E8%AF%AD%E8%A8%80%E4%B9%8B%E9%97%B4"><span class="nav-number">1.</span> <span class="nav-text">java介于编译型语言和解释型语言之间</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#JDK%E3%80%81JRE%E3%80%81JVM"><span class="nav-number">2.</span> <span class="nav-text">JDK、JRE、JVM</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#JDK%E7%BB%84%E6%88%90"><span class="nav-number">2.1.</span> <span class="nav-text">JDK组成</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#jdk%E7%9A%84bin%E7%9B%AE%E5%BD%95%E4%B8%8B%E5%8F%AF%E6%89%A7%E8%A1%8C%E6%96%87%E4%BB%B6"><span class="nav-number">2.2.</span> <span class="nav-text">jdk的bin目录下可执行文件</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%8F%98%E9%87%8F%E5%8F%8A%E8%BF%90%E7%AE%97"><span class="nav-number">3.</span> <span class="nav-text">变量及运算</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%9F%BA%E6%9C%AC%E7%B1%BB%E5%9E%8B%E5%8F%98%E9%87%8F-8%E5%A4%A7%E5%9F%BA%E6%9C%AC%E7%B1%BB%E5%9E%8B%EF%BC%8C%E5%85%B6%E4%BD%99%E9%83%BD%E6%98%AF%E5%BC%95%E7%94%A8%E7%B1%BB%E5%9E%8B"><span class="nav-number">3.1.</span> <span class="nav-text">基本类型变量(8大基本类型，其余都是引用类型)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%BC%95%E7%94%A8%E7%B1%BB%E5%9E%8B%E5%8F%98%E9%87%8F%EF%BC%88%E5%8F%98%E9%87%8F%E6%8C%87%E5%90%91%E5%86%85%E5%AE%B9%E5%9C%A8%E5%86%85%E5%AD%98%E4%B8%AD%E5%AD%98%E5%82%A8%E7%9A%84%E5%9C%B0%E5%9D%80%EF%BC%8C%E7%9B%B8%E5%BD%93%E4%BA%8EC-%E7%9A%84%E6%8C%87%E9%92%88%EF%BC%89"><span class="nav-number">3.2.</span> <span class="nav-text">引用类型变量（变量指向内容在内存中存储的地址，相当于C++的指针）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8F%98%E9%87%8F%E4%BD%9C%E7%94%A8%E5%9F%9F"><span class="nav-number">3.3.</span> <span class="nav-text">变量作用域</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%9B%B6%E7%A2%8E%E7%9F%A5%E8%AF%86%E7%82%B9"><span class="nav-number">3.4.</span> <span class="nav-text">零碎知识点</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%B5%81%E7%A8%8B%E6%8E%A7%E5%88%B6"><span class="nav-number">4.</span> <span class="nav-text">流程控制</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%95%B0%E7%BB%84%E6%93%8D%E4%BD%9C"><span class="nav-number">5.</span> <span class="nav-text">数组操作</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="cjx132"
+      src="/cjx132/images/avatar.png">
+  <p class="site-author-name" itemprop="name">cjx132</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/cjx132/archives/">
+          <span class="site-state-item-count">318</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/cjx132/categories/">
+        <span class="site-state-item-count">13</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/cjx132/tags/">
+        <span class="site-state-item-count">47</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://cjx132.github.io/cjx132/2019/12/13/Java/java%E5%85%A5%E9%97%A8/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/cjx132/images/avatar.png">
+      <meta itemprop="name" content="cjx132">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="cjx132">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="java入门 | cjx132">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          java入门
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2019-12-13 13:53:58" itemprop="dateCreated datePublished" datetime="2019-12-13T13:53:58+08:00">2019-12-13</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2026-09-13 21:55:56" itemprop="dateModified" datetime="2026-09-13T21:55:56+08:00">2026-09-13</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/cjx132/categories/java/" itemprop="url" rel="index"><span itemprop="name">java</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><h1 id="java介于编译型语言和解释型语言之间"><a href="#java介于编译型语言和解释型语言之间" class="headerlink" title="java介于编译型语言和解释型语言之间"></a>java介于编译型语言和解释型语言之间</h1><p>java把代码编译成“字节码”，针对不同平台分别开发虚拟机，虚拟机加载字节码并执行。</p>
+<h1 id="JDK、JRE、JVM"><a href="#JDK、JRE、JVM" class="headerlink" title="JDK、JRE、JVM"></a>JDK、JRE、JVM</h1><h2 id="JDK组成"><a href="#JDK组成" class="headerlink" title="JDK组成"></a>JDK组成</h2><ul>
+<li>编译器、调试器等工具</li>
+<li>JRE(运行Java字节码的虚拟机)<ul>
+<li>JVM+Runtime Library</li>
+</ul>
+</li>
+</ul>
+<h2 id="jdk的bin目录下可执行文件"><a href="#jdk的bin目录下可执行文件" class="headerlink" title="jdk的bin目录下可执行文件"></a>jdk的bin目录下可执行文件</h2><ul>
+<li>java:就是JVM，执行编译后的字节码</li>
+<li>javac:Java编译器，把java源码文件(.java)编译为字节码文件(.class)</li>
+<li>jar:把一组.class文件打包为.jar文件，便于发布</li>
+<li>javadoc:用于从java源码中自动提取注释并自动生成文档</li>
+<li>jdb:java调试器</li>
+</ul>
+<h1 id="变量及运算"><a href="#变量及运算" class="headerlink" title="变量及运算"></a>变量及运算</h1><h2 id="基本类型变量-8大基本类型，其余都是引用类型"><a href="#基本类型变量-8大基本类型，其余都是引用类型" class="headerlink" title="基本类型变量(8大基本类型，其余都是引用类型)"></a>基本类型变量(8大基本类型，其余都是引用类型)</h2><ul>
+<li><p>基本数据类型</p>
+<blockquote>
+<p>整型 byte(1个字节) short(2个字节) int(4个字节) long(8个字节)</p>
+<ol>
+<li>最高位为符号位</li>
+<li>15&#x3D;0xf&#x3D;0b1111&#x3D;017（0开头八进制，0x开头16进制，0b开头二进制）</li>
+<li>int不写初始值，默认值是0</li>
+<li>long 类型数字后面要加上L</li>
+<li>左移右移运算时，要转换成int类型</li>
+</ol>
+</blockquote>
+<hr>
+<blockquote>
+<p>浮点数类型 float(4个字节) 加后缀 double(8个字节)</p>
+<ol>
+<li>浮点数类型0.1不能准确表示，判断相等时需要比较差值是否足够小</li>
+<li>浮点数强制转换成整数类型时，<strong>直接丢弃后面的小数部分</strong>，需要四舍五入时+0.5再进行强制转换，如果转型后超过了整型能表示的最大范围，将返回整型的最大值。</li>
+<li>float类型数字后面要加上F</li>
+<li>最好完全避免使用浮点数进行比较(可使用BigDecimal数学工具类)</li>
+</ol>
+</blockquote>
+<hr>
+<blockquote>
+<p>字符类型char(2个字节) 可表示unicode编码(中文)</p>
+</blockquote>
+<hr>
+<blockquote>
+<p>布尔类型 boolean(4个字节)</p>
+<ol>
+<li>短路运算</li>
+<li>四个字节存储，运算参考整型变量</li>
+</ol>
+</blockquote>
+<hr>
+<blockquote>
+<p>常量 (前面加final修饰符，另外修饰符不分前后顺序)，变量名一般大写</p>
+</blockquote>
+<hr>
+<blockquote>
+<p>var关键字</p>
+</blockquote>
+</li>
+</ul>
+<h2 id="引用类型变量（变量指向内容在内存中存储的地址，相当于C-的指针）"><a href="#引用类型变量（变量指向内容在内存中存储的地址，相当于C-的指针）" class="headerlink" title="引用类型变量（变量指向内容在内存中存储的地址，相当于C++的指针）"></a>引用类型变量（变量指向内容在内存中存储的地址，相当于C++的指针）</h2><ul>
+<li><p>类 (引用类型)</p>
+</li>
+<li><p>接口 (引用类型)</p>
+</li>
+<li><p>字符串类型(String不是关键字，是一个类) (引用类型) 使用+进行拼接，可将其它数据类型先自动转型为字符串类型</p>
+<blockquote>
+<p><strong>不可变特性(字符串内容不可变)</strong><br>总结:</p>
+<ol>
+<li>Java的字符类型char是基本类型，字符串类型String是引用类型；</li>
+<li>基本类型的变量是“持有”某个数值，引用类型的变量是“指向”某个对象；</li>
+<li>引用类型的变量可以是空值null；</li>
+<li>要区分空值null和空字符串””。</li>
+</ol>
+</blockquote>
+</li>
+<li><p>数组(引用类型)</p>
+<blockquote>
+<p>数组所有元素初始化为：整型为0，浮点型为0.0，布尔型为false<br>数组创建后大小不可变<br>数组变量.length获得数组大小</p>
+</blockquote>
+</li>
+</ul>
+<h2 id="变量作用域"><a href="#变量作用域" class="headerlink" title="变量作用域"></a>变量作用域</h2><ol>
+<li>局部变量（定义在方法内部的变量）<ul>
+<li><strong>必须声明和初始化值</strong></li>
+</ul>
+</li>
+<li>实例变量（定义在方法外部，类中的变量，没有static关键字）<ul>
+<li><strong>从属于对象</strong></li>
+<li>调用时<strong>必须new一个实例才能调用</strong></li>
+<li>如果未初始化：基本类型初始化为0，引用类型初始化为null</li>
+</ul>
+</li>
+<li>类变量（定义在方法外部，类中的变量，static关键字修饰）<ul>
+<li><strong>从属于类（随类一起出现，一起消失）</strong></li>
+<li>前面有<strong>static关键字</strong></li>
+<li>调用时<strong>不需要new一个实例即可进行调用</strong></li>
+</ul>
+</li>
+</ol>
+<h2 id="零碎知识点"><a href="#零碎知识点" class="headerlink" title="零碎知识点"></a>零碎知识点</h2><ol>
+<li><p>标识符由字母，数字，$，_组成，<strong>其中不能以数字开头</strong></p>
+</li>
+<li><p>Java属于强类型语言（先定义后使用）</p>
+</li>
+<li><p><strong>小写字母开头定义的变量是基本类型变量，其余都是引用类型变量（数组也是引用类型变量）</strong>。</p>
+</li>
+<li><p>变量从低范围到高范围可以自动转换，从高范围到低范围需要进行强制转换</p>
+</li>
+</ol>
+<h1 id="流程控制"><a href="#流程控制" class="headerlink" title="流程控制"></a>流程控制</h1><ol>
+<li><p>判断引用类型变量是否相等时</p>
+<blockquote>
+<p><strong>“&#x3D;&#x3D;”判断地址</strong><br>s1 !&#x3D; null &amp;&amp; s1.equals(“hello”)判断内容是否相等，同时避免s1为null <strong>switch匹配字符串时是比较”内容相等”</strong></p>
+</blockquote>
+</li>
+<li><p>for each循环无法指定遍历顺序，也无法获取数组的索引。除了数组外，for each循环能够遍历所有“可迭代”的数据类型，包括List、Map等。</p>
+</li>
+</ol>
+<h1 id="数组操作"><a href="#数组操作" class="headerlink" title="数组操作"></a>数组操作</h1><blockquote>
+<p><img src="/cjx132/images/Java/%E6%95%B0%E7%BB%84%E5%86%85%E5%AD%98%E7%A9%BA%E9%97%B4.png"></p>
+<p>数组声明时在栈中出现，创建时才在堆中开辟内存空间</p>
+<p>Java对象存储在堆中，数组本身对象</p>
+</blockquote>
+<ol>
+<li>Arrays.toString(ns)&#x2F;&#x2F;打印数组</li>
+<li>Arrays.sort(ns)<ul>
+<li>整型数组（数组的内容是整数），排序后数组内容发生改变。</li>
+<li>字符串数组（数组的内容是字符串的地址），排序后数组内容发生改变。但是字符串在内存中均没有任何变化，ns数组的每个元素指向变化了</li>
+</ul>
+</li>
+<li>多维数组的每个数组元素长度都不要求相同</li>
+<li>打印多维数组可以使用Arrays.deepToString()</li>
+</ol>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/cjx132/tags/java%E5%9F%BA%E7%A1%80/" rel="tag"># java基础</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+            </div>
+            <div class="post-nav-item">
+                <a href="/cjx132/2020/01/04/Java/%E9%9D%A2%E5%90%91%E5%AF%B9%E8%B1%A1/" rel="next" title="面向对象">
+                  面向对象 <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2026</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">cjx132</span>
+  </div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+</body>
+</html>

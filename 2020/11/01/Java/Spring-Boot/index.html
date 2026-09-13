@@ -1,0 +1,529 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: dark)"><meta name="generator" content="Hexo 7.1.1">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/cjx132/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/cjx132/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/cjx132/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/cjx132/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/cjx132/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.3.1/css/all.min.css" integrity="sha256-4Lad8m4ZWW1Lgb9+sMVLYEfnIh7BjV1NQMEe79Pviks=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancyapps-ui/6.1.14/fancybox/fancybox.css" integrity="sha256-mdaMxrItEW6hMIVJJNPKuX0B7KCSJQVEv3mVY4N2we4=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/pace/1.2.4/themes/blue/pace-theme-minimal.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pace/1.2.4/pace.min.js" integrity="sha256-gqd7YTjg/BtfqWSwsJOvndl0Bxc8gFImLEkXQT8+qj0=" crossorigin="anonymous" defer></script>
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"cjx132.github.io","root":"/cjx132/","images":"/cjx132/images","scheme":"Gemini","darkmode":true,"version":"8.29.0","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"hljswrap":true,"codeblock":{"theme":{"light":"default","dark":"stackoverflow-dark"},"prism":{"light":"prism","dark":"prism-dark"},"copy_button":{"enable":true,"style":"mac"},"fold":{"enable":false,"height":500},"language":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"duration":200,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/cjx132/search.xml","localsearch":{"enable":true,"top_n_per_article":5,"unescape":false,"preload":true}}</script><script src="/cjx132/js/config.js" defer></script>
+
+    <meta name="description" content="Spring Boot是什么 约定大于配置 SpringBoot其实不是什么新的框架，它默认配置了很多框架的使用方式，就像maven整合了所有的jar包，spring boot整合了所有的框架 SpringBoot官方文档  启动类自动配置原理资料参考  关于每个注解的作用：参考 关于整个自动装配及启动流程的详细解释【重点参考】：参考 关于整个自动装配源码剖析的脑图【理解调用流程】：参考  结论">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Spring Boot">
+<meta property="og:url" content="https://cjx132.github.io/cjx132/2020/11/01/Java/Spring-Boot/index.html">
+<meta property="og:site_name" content="cjx132">
+<meta property="og:description" content="Spring Boot是什么 约定大于配置 SpringBoot其实不是什么新的框架，它默认配置了很多框架的使用方式，就像maven整合了所有的jar包，spring boot整合了所有的框架 SpringBoot官方文档  启动类自动配置原理资料参考  关于每个注解的作用：参考 关于整个自动装配及启动流程的详细解释【重点参考】：参考 关于整个自动装配源码剖析的脑图【理解调用流程】：参考  结论">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://cjx132.github.io/cjx132/images/Java/%E5%AD%A6%E4%B9%A0%E8%B7%AF%E7%BA%BF.png">
+<meta property="article:published_time" content="2020-10-31T23:33:07.000Z">
+<meta property="article:modified_time" content="2026-09-13T13:55:59.405Z">
+<meta property="article:author" content="cjx132">
+<meta property="article:tag" content="java基础">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://cjx132.github.io/cjx132/images/Java/%E5%AD%A6%E4%B9%A0%E8%B7%AF%E7%BA%BF.png">
+
+
+<link rel="canonical" href="https://cjx132.github.io/cjx132/2020/11/01/Java/Spring-Boot/">
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://cjx132.github.io/cjx132/2020/11/01/Java/Spring-Boot/","path":"2020/11/01/Java/Spring-Boot/","title":"Spring Boot"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>Spring Boot | cjx132</title>
+  
+
+
+
+
+
+
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/fancyapps-ui/6.1.14/fancybox/fancybox.umd.js" integrity="sha256-QnJV4HT5r8i89ovZGRD86iynZqHerEbT2xt69vDM36I=" crossorigin="anonymous" defer></script>
+<script src="/cjx132/js/utils.js" defer></script><script src="/cjx132/js/motion.js" defer></script><script src="/cjx132/js/sidebar.js" defer></script><script src="/cjx132/js/next-boot.js" defer></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.5.0/search.js" integrity="sha256-xFC6PJ82SL9b3WkGjFavNiA9gm5z6UBxWPiu4CYjptg=" crossorigin="anonymous" defer></script>
+<script src="/cjx132/js/third-party/search/local-search.js" defer></script>
+
+
+
+
+  <script src="/cjx132/js/third-party/fancybox.js" defer></script>
+
+  <script src="/cjx132/js/third-party/pace.js" defer></script>
+
+
+  
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/cjx132/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-search popup-trigger" aria-label="搜索" role="button">
+      <i class="fa fa-search fa-fw fa-lg"></i>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/cjx132/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">cjx132</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">道阻且长 行则将至</p>
+  </div>
+
+  <div class="site-nav-toggle" aria-label="切换导航栏" role="button">
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu">
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  
+  <template id="search-popup-template"><div class="search-pop-overlay">
+    <div class="popup search-popup">
+      <div class="search-header">
+        <span class="search-icon">
+          <i class="fa fa-search"></i>
+        </span>
+        <div class="search-input-container">
+          <input autocomplete="off" autocapitalize="off" maxlength="80"
+                placeholder="搜索..." spellcheck="false"
+                type="search" class="search-input">
+        </div>
+        <span class="popup-btn-close" role="button">
+          <i class="fa fa-times-circle"></i>
+        </span>
+      </div>
+      <div class="search-result-container">
+        <div class="search-result-icon">
+          <i class="fa fa-spinner fa-pulse fa-5x"></i>
+        </div>
+      </div>
+    </div>
+  </div></template>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Spring-Boot%E6%98%AF%E4%BB%80%E4%B9%88"><span class="nav-number">1.</span> <span class="nav-text">Spring Boot是什么</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%90%AF%E5%8A%A8%E7%B1%BB"><span class="nav-number">2.</span> <span class="nav-text">启动类</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%87%AA%E5%8A%A8%E9%85%8D%E7%BD%AE%E5%8E%9F%E7%90%86"><span class="nav-number">2.1.</span> <span class="nav-text">自动配置原理</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#yaml"><span class="nav-number">3.</span> <span class="nav-text">yaml</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#SpringBoot-Web%E5%BC%80%E5%8F%91"><span class="nav-number">4.</span> <span class="nav-text">SpringBoot Web开发</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%9D%99%E6%80%81%E8%B5%84%E6%BA%90%E5%AF%BC%E5%85%A5"><span class="nav-number">4.1.</span> <span class="nav-text">静态资源导入</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%89%A9%E5%B1%95MVC%E9%85%8D%E7%BD%AE"><span class="nav-number">4.2.</span> <span class="nav-text">扩展MVC配置</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Druid%E4%BD%BF%E7%94%A8"><span class="nav-number">4.3.</span> <span class="nav-text">Druid使用</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Mybatis%E6%95%B4%E5%90%88"><span class="nav-number">4.4.</span> <span class="nav-text">Mybatis整合</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Swagger%E9%85%8D%E7%BD%AE"><span class="nav-number">4.5.</span> <span class="nav-text">Swagger配置</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%BC%82%E6%AD%A5%EF%BC%8C%E5%AE%9A%E6%97%B6%EF%BC%8C%E9%82%AE%E4%BB%B6"><span class="nav-number">4.6.</span> <span class="nav-text">异步，定时，邮件</span></a></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="cjx132"
+      src="/cjx132/images/avatar.png">
+  <p class="site-author-name" itemprop="name">cjx132</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/cjx132/archives/">
+          <span class="site-state-item-count">318</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/cjx132/categories/">
+        <span class="site-state-item-count">13</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/cjx132/tags/">
+        <span class="site-state-item-count">47</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://cjx132.github.io/cjx132/2020/11/01/Java/Spring-Boot/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/cjx132/images/avatar.png">
+      <meta itemprop="name" content="cjx132">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="cjx132">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="Spring Boot | cjx132">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Spring Boot
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2020-11-01 07:33:07" itemprop="dateCreated datePublished" datetime="2020-11-01T07:33:07+08:00">2020-11-01</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2026-09-13 21:55:59" itemprop="dateModified" datetime="2026-09-13T21:55:59+08:00">2026-09-13</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/cjx132/categories/java/" itemprop="url" rel="index"><span itemprop="name">java</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><p><img src="/cjx132/images/Java/%E5%AD%A6%E4%B9%A0%E8%B7%AF%E7%BA%BF.png"></p>
+<h1 id="Spring-Boot是什么"><a href="#Spring-Boot是什么" class="headerlink" title="Spring Boot是什么"></a>Spring Boot是什么</h1><ul>
+<li>约定大于配置</li>
+<li>SpringBoot其实不是什么新的框架，它默认配置了很多框架的使用方式，就像maven整合了所有的jar包，spring boot整合了所有的框架</li>
+<li><a target="_blank" rel="noopener" href="https://docs.spring.io/spring-boot/docs/2.3.5.RELEASE/reference/htmlsingle/#using-boot-auto-configuration">SpringBoot官方文档</a></li>
+</ul>
+<h1 id="启动类"><a href="#启动类" class="headerlink" title="启动类"></a>启动类</h1><h2 id="自动配置原理"><a href="#自动配置原理" class="headerlink" title="自动配置原理"></a>自动配置原理</h2><p><strong>资料参考</strong></p>
+<ul>
+<li>关于每个注解的作用：<a target="_blank" rel="noopener" href="https://blog.csdn.net/u010502101/article/details/78817581?utm_medium=distribute.pc_relevant.none-task-blog-BlogCommendFromMachineLearnPai2-3.channel_param&depth_1-utm_source=distribute.pc_relevant.none-task-blog-BlogCommendFromMachineLearnPai2-3.channel_param">参考</a></li>
+<li><strong>关于整个自动装配及启动流程的详细解释【重点参考】</strong>：<a target="_blank" rel="noopener" href="https://blog.csdn.net/qq_28289405/article/details/81302498">参考</a></li>
+<li><strong>关于整个自动装配源码剖析的脑图【理解调用流程】</strong>：<a target="_blank" rel="noopener" href="https://www.processon.com/view/link/5fa161d67d9c081baf11f97c">参考</a></li>
+</ul>
+<p><strong>结论</strong></p>
+<ul>
+<li>springboot所有自动配置都是在启动的时候扫描并加载。 所以，自动配置真正实现是从classpath中搜寻所有的META-INF&#x2F;spring.factories配置文件，并将其中对应的org.springframework.boot.autoconfigure包下的配置项，通过反射实例化为对应标注了@Configuration的JavaConfig形式的IOC容器配置类，然后将这些都汇总成为一个实例并加载到IOC容器中。</li>
+<li>但是不一定生效，要判断条件是否成立，只要导入了对应的start,就有对应的启动器了，有了启动器,我们自动装配就会生效，然后就配置成功：核心注解：@ConditionalOnXXX，如果这里面的条件都满足，才会生效</li>
+<li>@Import(AutoConfigurationImportSelector.class)，借助AutoConfigurationImportSelector，@EnableAutoConfiguration可以帮助SpringBoot应用将所有符合条件的@Configuration配置都加载到当前SpringBoot创建并使用的IoC容器。</li>
+</ul>
+<p><strong>自动配置幕后英雄：SpringFactoriesLoader详解</strong></p>
+<ul>
+<li>SpringFactoriesLoader属于Spring框架私有的一种扩展方案，其主要功能就是从指定的配置文件META-INF&#x2F;spring.factories加载配置。</li>
+<li>配合@EnableAutoConfiguration使用的话，它更多是提供一种配置查找的功能支持，即根据@EnableAutoConfiguration的完整类名org.springframework.boot.autoconfigure.EnableAutoConfiguration作为查找的Key,获取对应的一组@Configuration类</li>
+<li>所以，@EnableAutoConfiguration自动配置的魔法骑士就变成了：<strong>从classpath中搜寻所有的META-INF&#x2F;spring.factories配置文件，并将其中org.springframework.boot.autoconfigure.EnableutoConfiguration对应的配置项通过反射（Java Refletion）实例化为对应的标注了@Configuration的JavaConfig形式的IoC容器配置类，然后汇总为一个并加载到IoC容器。</strong></li>
+</ul>
+<p><strong>结论</strong></p>
+<ol>
+<li>Spring Boot在启动的时候从类路径下的META-INF&#x2F;spring.factories中获取EnableAutoConfiguration指定的值</li>
+<li>将这些值作为自动配置类导入容器，自动配置类就生效 ，帮我们进行自动配置工作</li>
+<li>以前我们需要自己配置的东西，自动配置类都帮我们解决了</li>
+<li>整个J2EE的整体解决方案和自动配置都在springboot-autoconfigure的jar包中</li>
+<li>它将所有需要导入的组件以全类名的方式返回，这些组件就会被添加到容器中</li>
+<li>它会给容器中导入非常多的自动配置类(xxxAutoConfiguration) , 就是给容器中导入这个场景需要的所有组件，并配置好这些组件</li>
+<li>有了自动配置类，免去了我们手动编写配置注入功能组件等的工作</li>
+</ol>
+<p><strong>精髓</strong></p>
+<ol>
+<li><p>SpringBoot启动会加载大量的自动配置类</p>
+</li>
+<li><p>我们看我们需要的功能有没有在SpringBoot默认写好的自动配置类当中;</p>
+</li>
+<li><p>我们再来看这个自动配置类中到底配置了哪些组件; (只要我们要用的组件存在在其中，我们就不需要再手动配置了)</p>
+</li>
+<li><p>给容器中自动配置类添加组件的时候，会从properties类中获取某些属性。我们只需要在yaml配置文件中指定这些属性的值即可实现自定义配置;</p>
+</li>
+</ol>
+<p>xxxxAutoConfigurartion:自动配置类;给容器中添加组件（bean）</p>
+<p>xxxxProperties:封装配置文件中相关属性;</p>
+<h1 id="yaml"><a href="#yaml" class="headerlink" title="yaml"></a>yaml</h1><ul>
+<li><p>yaml文件配合<code>@ConfigurationProperties(prefix = &quot;spring.mvc&quot;)</code>注解实现WebMvcProperties类中属性的注入（也就是依赖注入）</p>
+<p>（WebMvcProperties类可理解为<code>xxxProperties</code>类的一个代表）</p>
+<blockquote>
+<ol>
+<li><p>代替了在WebMvcProperties类中使用@Value()注解进行属性注入的方法，实现了解耦</p>
+</li>
+<li><p>经过这种方式注入的WebMvcProperties类，经配置交由IOC容器管理</p>
+</li>
+<li><p>WebMvcProperties类由IOC容器管理后，也可被其他JavaConfig类使用，读取其中的属性值</p>
+<p>（JavaConfig类相当于beans.xml，用于配置bean）</p>
+<p>（比如：WebMvcAutoConfiguration自动配置类（JavaConfig）读取WebMvcProperties类中的属性，实现JavaConfig中bean的配置）</p>
+<blockquote>
+<p>具体使用方法：</p>
+<ol>
+<li>JavaConfig类在类头使用<code>@EnableConfigurationProperties(&#123;xxxProperties.class&#125;)</code>注解</li>
+<li>在JavaConfig类中读取并使用<code>xxxProperties</code>类经yaml注入的属性值</li>
+<li>因此，通过这个JavaConfig类我们便实现了springboot的自定义配置</li>
+</ol>
+</blockquote>
+</li>
+<li><p>这也是SpringBoot自动装配的原理**【重点】**</p>
+</li>
+</ol>
+</blockquote>
+</li>
+<li><p>application.yaml配置文件配置位置及优先级（优先级自上而下依次降低）</p>
+<ol>
+<li><code>file:./config/</code></li>
+<li><code>file:./config/*/</code></li>
+<li><code>file:./</code></li>
+<li><code>classpath:/config/</code></li>
+<li><code>classpath:/</code></li>
+</ol>
+</li>
+<li><p>多环境切换</p>
+<p>方法1：利用配置文件优先级实现配置覆盖</p>
+<p>方法2：在一个yaml文件中声明。如下：</p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">server:</span></span><br><span class="line">  <span class="attr">port:</span> <span class="number">8081</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#环境dev激活使用</span></span><br><span class="line"><span class="attr">spring:</span></span><br><span class="line">  <span class="attr">profiles:</span></span><br><span class="line">    <span class="attr">active:</span> <span class="string">dev</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#多个配置之间中间使用---分割</span></span><br><span class="line"><span class="meta">---</span></span><br><span class="line"><span class="attr">server:</span></span><br><span class="line">  <span class="attr">port:</span> <span class="number">8082</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#指定环境为dev</span></span><br><span class="line"><span class="attr">spring:</span></span><br><span class="line">  <span class="attr">profiles:</span> <span class="string">dev</span></span><br><span class="line"><span class="meta">---</span></span><br><span class="line"><span class="attr">server:</span></span><br><span class="line">  <span class="attr">port:</span> <span class="number">8083</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#指定环境为test</span></span><br><span class="line"><span class="attr">spring:</span></span><br><span class="line">  <span class="attr">profiles:</span> <span class="string">test</span></span><br></pre></td></tr></table></figure></li>
+</ul>
+<h1 id="SpringBoot-Web开发"><a href="#SpringBoot-Web开发" class="headerlink" title="SpringBoot Web开发"></a>SpringBoot Web开发</h1><h2 id="静态资源导入"><a href="#静态资源导入" class="headerlink" title="静态资源导入"></a>静态资源导入</h2><ol>
+<li>在springboot中，我们可以使用以下方式处理静态资源<ul>
+<li>webjars <code>localhost:8080/webjars/</code></li>
+<li>public，static，resources <code>localhost:8080/</code></li>
+</ul>
+</li>
+<li>优先级：resources&gt;static(默认)&gt;public</li>
+<li>templates目录下的内容只能通过controller访问</li>
+<li>首页(index.html)直接放在上述文件夹下即可</li>
+</ol>
+<h2 id="扩展MVC配置"><a href="#扩展MVC配置" class="headerlink" title="扩展MVC配置"></a>扩展MVC配置</h2><ul>
+<li><p>SpringBoot在自动配置很多组件的时候，先看容器中有没有用户自己配置的(如果用户自己配置@bean)，如果有就用用户配置的，如果没有就用自动配置的;如果有些组件可以存在多个，比如我们的视图解析器，就将用户配置的和自己默认的组合起来!</p>
+</li>
+<li><p>以下代码</p>
+<ol>
+<li><p>实现<code>WebMvcConfigurer</code>接口，扩展<code>WebMvcAutoConfiguration</code>；</p>
+<blockquote>
+<ul>
+<li>如果添加@EnableWebMvc该注解，则WebMvcAutoConfiguration自动配置类失效</li>
+<li>(原因在于自动配置类上的@ConditionalOnxxx注解不满足某个条件了)</li>
+</ul>
+</blockquote>
+</li>
+</ol>
+</li>
+</ul>
+<ol start="2">
+<li><p>定义自己的视图解析器类；</p>
+</li>
+<li><p>把自定义的视图解析器在MyMvcConfiguration中以@bean方式配置交由SpringIOC容器管理。实现MVC的扩展配置</p>
+</li>
+</ol>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//扩展springMVC(WebMvcConfigurer相当于WebMvcAutoConfiguration的一个扩展)</span></span><br><span class="line"><span class="meta">@Configuration</span></span><br><span class="line"><span class="meta">@EnableWebMvc</span></span><br><span class="line"><span class="comment">//如果添加@EnableWebMvc该注解，则WebMvcAutoConfiguration自动配置类失效</span></span><br><span class="line"><span class="comment">//(原因在于自动配置类上的@ConditionalOnxxx注解不满足某个条件了)</span></span><br><span class="line"></span><br><span class="line"><span class="comment">//1.实现WebMvcConfigurer接口,扩展WebMvcAutoConfiguration</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">MyMvcConfiguration</span> <span class="keyword">implements</span> <span class="title class_">WebMvcConfigurer</span> &#123;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//3.把自定义的视图解析器交由SpringIOC容器管理</span></span><br><span class="line">    <span class="meta">@Bean</span></span><br><span class="line">    <span class="keyword">public</span> <span class="type">MyViewResolver</span> <span class="title function_">myViewResolver</span><span class="params">()</span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">new</span> <span class="title class_">MyViewResolver</span>();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//2.自定义一个自己的视图解析器：定义一个实现了ViewResolver的类</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">class</span> <span class="title class_">MyViewResolver</span> <span class="keyword">implements</span> <span class="title class_">ViewResolver</span>&#123;</span><br><span class="line"></span><br><span class="line">        <span class="meta">@Override</span></span><br><span class="line">        <span class="keyword">public</span> <span class="type">View</span> <span class="title function_">resolveViewName</span><span class="params">(String s, Locale locale)</span> <span class="keyword">throws</span> Exception &#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="literal">null</span>;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>在SpringBoot中，有非常多的xxxxConfiguration，只要看见这个东西，说明这个JavaConfig类要对xxxxAutoConfiguration自动配置类做扩展或者覆盖掉</li>
+</ul>
+<h2 id="Druid使用"><a href="#Druid使用" class="headerlink" title="Druid使用"></a>Druid使用</h2><p><a target="_blank" rel="noopener" href="https://blog.csdn.net/weixin_38187317/article/details/81562571">参考</a></p>
+<h2 id="Mybatis整合"><a href="#Mybatis整合" class="headerlink" title="Mybatis整合"></a>Mybatis整合</h2><ol>
+<li><p>导入包</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.mybatis.spring.boot<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>mybatis-spring-boot-starter<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">version</span>&gt;</span>2.1.3<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>在application.yml中配置</p>
+<figure class="highlight yml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">spring:</span></span><br><span class="line">  <span class="attr">datasource:</span></span><br><span class="line">    <span class="attr">password:</span> <span class="number">123456</span></span><br><span class="line">    <span class="attr">url:</span> <span class="string">jdbc:mysql://localhost:3306/mybatis?useUnicode=true&amp;characterEncoding=utf8</span></span><br><span class="line">    <span class="attr">driver-class-name:</span> <span class="string">com.mysql.cj.jdbc.Driver</span></span><br><span class="line">    <span class="attr">username:</span> <span class="string">root</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#整合mybatis</span></span><br><span class="line"><span class="attr">mybatis:</span></span><br><span class="line">  <span class="attr">type-aliases-package:</span> <span class="string">com.cjx.pojo</span></span><br><span class="line">  <span class="attr">mapper-locations:</span> <span class="string">classpath:mybatis/mapper/*.xml</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>编写mapper接口和对应的mapper.xml文件</p>
+</li>
+<li><p>service层调用dao层</p>
+</li>
+<li><p>controller调用service层</p>
+</li>
+</ol>
+<h2 id="Swagger配置"><a href="#Swagger配置" class="headerlink" title="Swagger配置"></a>Swagger配置</h2><ol>
+<li>pom文件</li>
+</ol>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>io.springfox<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>springfox-swagger2<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">version</span>&gt;</span>2.9.2<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>io.springfox<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>springfox-swagger-ui<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">version</span>&gt;</span>2.9.2<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<ol start="2">
+<li>配置Swagger</li>
+</ol>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Configuration</span></span><br><span class="line"><span class="meta">@EnableSwagger2</span><span class="comment">//开启swagger2</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">SwaggerConfig</span> &#123;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//实现分组</span></span><br><span class="line">    <span class="comment">//A组开发的</span></span><br><span class="line"></span><br><span class="line">    <span class="meta">@Bean</span></span><br><span class="line">    <span class="keyword">public</span> <span class="type">Docket</span> <span class="title function_">docket1</span><span class="params">()</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">new</span> <span class="title class_">Docket</span>(DocumentationType.SWAGGER_2)</span><br><span class="line">                .groupName(<span class="string">&quot;A&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//cjx组开发的</span></span><br><span class="line">    <span class="comment">//配置了swagger的Docket的Bean实例</span></span><br><span class="line">    <span class="meta">@Bean</span></span><br><span class="line">    <span class="keyword">public</span> <span class="type">Docket</span> <span class="title function_">docket</span><span class="params">(Environment environment)</span> &#123;</span><br><span class="line">        <span class="comment">//设置要显示的Swagger环境</span></span><br><span class="line">        <span class="type">Profiles</span> <span class="variable">profiles</span> <span class="operator">=</span> Profiles.of(<span class="string">&quot;dev&quot;</span>, <span class="string">&quot;test&quot;</span>);</span><br><span class="line"></span><br><span class="line">        <span class="comment">//通过environment.acceptsProfiles判断是否处在自己设定的环境中</span></span><br><span class="line">        <span class="type">boolean</span> <span class="variable">isEnable</span> <span class="operator">=</span> environment.acceptsProfiles(profiles);</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">new</span> <span class="title class_">Docket</span>(DocumentationType.SWAGGER_2)</span><br><span class="line">                .apiInfo(apiInfo())</span><br><span class="line">                .enable(isEnable)<span class="comment">//是否启动swagger,true启动,false关闭</span></span><br><span class="line">                .groupName(<span class="string">&quot;cjx&quot;</span>)<span class="comment">//实现分组</span></span><br><span class="line">                .select()</span><br><span class="line">                .apis(RequestHandlerSelectors.basePackage(<span class="string">&quot;com.cjx.controller&quot;</span>))</span><br><span class="line"><span class="comment">//                .paths(PathSelectors.ant(&quot;/cjx/**&quot;))</span></span><br><span class="line">                .build()</span><br><span class="line">                ;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//配置swagger信息=apiInfo</span></span><br><span class="line">    <span class="keyword">public</span> <span class="type">ApiInfo</span> <span class="title function_">apiInfo</span><span class="params">()</span> &#123;</span><br><span class="line">        <span class="type">Contact</span> <span class="variable">contact</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">Contact</span>(<span class="string">&quot;cjx&quot;</span>, <span class="string">&quot;12&quot;</span>, <span class="string">&quot;12@qq.com&quot;</span>);</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">new</span> <span class="title class_">ApiInfo</span>(</span><br><span class="line">                <span class="string">&quot;cjx&quot;</span>,</span><br><span class="line">                <span class="string">&quot;test&quot;</span>,</span><br><span class="line">                <span class="string">&quot;v1.0&quot;</span>,</span><br><span class="line">                <span class="string">&quot;12&quot;</span>,</span><br><span class="line">                contact,</span><br><span class="line">                <span class="string">&quot;sd&quot;</span>,</span><br><span class="line">                <span class="string">&quot;dds&quot;</span>,</span><br><span class="line">                <span class="keyword">new</span> <span class="title class_">ArrayList</span>&lt;&gt;()</span><br><span class="line">        );</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<ol start="3">
+<li>controller中使用</li>
+</ol>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@RestController</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">HelloController</span> &#123;</span><br><span class="line">    <span class="meta">@RequestMapping(value = &quot;/hello&quot;,method = RequestMethod.GET)</span></span><br><span class="line">    <span class="keyword">public</span> <span class="type">String</span> <span class="title function_">hello</span><span class="params">()</span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="string">&quot;hello&quot;</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//只要返回的接口中存在实体类，他就会被扫描到swagger中</span></span><br><span class="line">    <span class="meta">@PostMapping(value = &quot;/user&quot;)</span></span><br><span class="line">    <span class="keyword">public</span> <span class="type">User</span> <span class="title function_">user</span><span class="params">()</span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">new</span> <span class="title class_">User</span>();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@ApiOperation(&quot;Hello2接口&quot;)</span></span><br><span class="line">    <span class="comment">//restful风格可以接收前端传来的非对象参数</span></span><br><span class="line">    <span class="meta">@RequestMapping(value = &quot;/hello2/&#123;name&#125;&quot;,method = RequestMethod.GET)</span></span><br><span class="line">    <span class="keyword">public</span> <span class="type">String</span> <span class="title function_">hello2</span><span class="params">(<span class="meta">@ApiParam(&quot;用户名&quot;)</span><span class="meta">@PathVariable(&quot;name&quot;)</span> String username)</span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="string">&quot;hello2&quot;</span>+username;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@PostMapping(value = &quot;/postt&quot;)</span></span><br><span class="line">    <span class="keyword">public</span> <span class="type">User</span> <span class="title function_">postt</span><span class="params">(User user)</span>&#123;</span><br><span class="line">        <span class="keyword">return</span> user;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="异步，定时，邮件"><a href="#异步，定时，邮件" class="headerlink" title="异步，定时，邮件"></a>异步，定时，邮件</h2><ol>
+<li><p>异步</p>
+<p>使用场景：controller及时返回前端部分信息，业务层耗时长的代码开启异步在后台执行</p>
+<p>需要两个注解：</p>
+<ul>
+<li>主启动类：@EnableAsync&#x2F;&#x2F;开启异步注解功能</li>
+<li>自定义异步方法：@Async&#x2F;&#x2F;告诉spring这是一个异步的方法</li>
+</ul>
+</li>
+<li><p>定时</p>
+<p>使用场景：实现定时任务</p>
+<p>需要两个注解：</p>
+<ul>
+<li>主启动类：@EnableScheduling&#x2F;&#x2F;开启定时功能的注解</li>
+<li>自定义定时方法：@Scheduled(cron &#x3D; “0 56 13 * * ?”)</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//在一个特定的时间执行这个方法</span></span><br><span class="line"><span class="comment">//cron表达式</span></span><br><span class="line"><span class="comment">//秒 分 时 日 月 周几</span></span><br><span class="line"><span class="meta">@Scheduled(cron = &quot;0 56 13 * * ?&quot;)</span></span><br><span class="line"><span class="keyword">public</span> <span class="type">void</span> <span class="title function_">hello</span><span class="params">()</span>&#123;</span><br><span class="line">    System.out.println(<span class="string">&quot;hello,你被执行了&quot;</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>邮件</p>
+<ul>
+<li><p>.pom导入包</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.springframework.boot<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>spring-boot-starter-web<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>application.properties配置</p>
+<figure class="highlight properties"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">spring.mail.host</span>=<span class="string">smtp.qq.com</span></span><br><span class="line"><span class="attr">spring.mail.username</span>=<span class="string">邮箱名</span></span><br><span class="line"><span class="attr">spring.mail.password</span>=<span class="string">动态密码</span></span><br><span class="line"><span class="comment">#qq需要开启加密验证</span></span><br><span class="line"><span class="attr">spring.mail.properties.mail.smtp.ssl.enable</span>=<span class="string">true</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>测试使用如下</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Autowired</span></span><br><span class="line">JavaMailSenderImpl javaMailSender;</span><br><span class="line"><span class="meta">@Test</span></span><br><span class="line"><span class="type">void</span> <span class="title function_">contextLoads</span><span class="params">()</span> &#123;</span><br><span class="line">    <span class="comment">//一个简单的邮件</span></span><br><span class="line">    <span class="type">SimpleMailMessage</span> <span class="variable">message</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">SimpleMailMessage</span>();</span><br><span class="line">    message.setSubject(<span class="string">&quot;申请&quot;</span>);</span><br><span class="line">    message.setText(<span class="string">&quot;谢谢&quot;</span>);</span><br><span class="line">    message.setTo(<span class="string">&quot;15366763357@163.com&quot;</span>);</span><br><span class="line">    message.setFrom(<span class="string">&quot;2805132402@qq.com&quot;</span>);</span><br><span class="line">    javaMailSender.send(message);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="meta">@Test</span></span><br><span class="line"><span class="type">void</span> <span class="title function_">contextLoads2</span><span class="params">()</span> <span class="keyword">throws</span> MessagingException &#123;</span><br><span class="line">    <span class="comment">//一个复杂的邮件</span></span><br><span class="line">    <span class="type">MimeMessage</span> <span class="variable">message</span> <span class="operator">=</span> javaMailSender.createMimeMessage();</span><br><span class="line"></span><br><span class="line">    <span class="comment">//组装</span></span><br><span class="line">    <span class="type">MimeMessageHelper</span> <span class="variable">helper</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">MimeMessageHelper</span>(message,<span class="literal">true</span>);</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    <span class="comment">//正文</span></span><br><span class="line">    helper.setSubject(<span class="string">&quot;申请&quot;</span>);</span><br><span class="line">    helper.setText(<span class="string">&quot;&lt;p style=&#x27;color:red&#x27;&gt;复杂&lt;/p&gt;&quot;</span>,<span class="literal">true</span>);</span><br><span class="line"></span><br><span class="line">    <span class="comment">//附件</span></span><br><span class="line">    helper.addAttachment(<span class="string">&quot;1.txt&quot;</span>,<span class="keyword">new</span> <span class="title class_">File</span>(<span class="string">&quot;D:\\桌面文件\\任务.txt&quot;</span>));</span><br><span class="line"></span><br><span class="line">    helper.setTo(<span class="string">&quot;15366763357@163.com&quot;</span>);</span><br><span class="line">    helper.setFrom(<span class="string">&quot;2805132402@qq.com&quot;</span>);</span><br><span class="line">    javaMailSender.send(message);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
+</ul>
+</li>
+</ol>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/cjx132/tags/java%E5%9F%BA%E7%A1%80/" rel="tag"># java基础</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/cjx132/2020/10/29/Java/SpringMVC/" rel="prev" title="SpringMVC">
+                  <i class="fa fa-angle-left"></i> SpringMVC
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/cjx132/2020/11/02/Top150/%E6%91%86%E5%8A%A8%E6%8E%92%E5%BA%8F2/" rel="next" title="摆动排序2">
+                  摆动排序2 <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2026</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">cjx132</span>
+  </div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+</body>
+</html>
